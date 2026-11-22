@@ -3528,7 +3528,7 @@
         { expectedLetter: 'U', clue: '4e lettre : Comme **U**n passé englouti (Ava Reid).' },
         { expectedLetter: 'R', clue: '5e lettre : Comme **R**ed City, **R**in de Sinegard ou **R**une Winters.' }
       ];
-      const expectedWords = seal2.expectedFinalWords || ['AMOUR', 'LAURA', 'LAMOUR'];
+      const expectedWords = seal2.expectedFinalWords || ['AMOUR', 'LAURE', 'LAURA', 'LAMOUR'];
 
       stage.innerHTML = `
         <div class="mg-question-box">
@@ -3545,7 +3545,7 @@
               .join('')}
           </div>
           <div class="mg-input-row">
-            <input type="text" class="mg-runic-input" id="mg-acrostic-inp" placeholder="${escapeHtml(seal2.placeholder || 'Tape AMOUR ou LAURA...')}" autocomplete="off" />
+            <input type="text" class="mg-runic-input" id="mg-acrostic-inp" placeholder="${escapeHtml(seal2.placeholder || 'Tape AMOUR ou LAURE...')}" autocomplete="off" />
             <button type="button" class="mg-btn" id="mg-acrostic-btn">Invoquer l’Acrostiche 🌟</button>
           </div>
           <div class="mg-feedback" id="mg-acrostic-fb"></div>
@@ -3566,7 +3566,7 @@
           sfx.error();
           triggerShake(wrapper);
           fb.className = 'mg-feedback show err';
-          fb.textContent = 'Regarde les 5 initiales dorées entre crochets : A - M - O - U - R (ou LAURA) !';
+          fb.textContent = 'Regarde les 5 initiales dorées entre crochets : A - M - O - U - R (ou LAURE) !';
         }
       };
 
@@ -3583,7 +3583,7 @@
 
       const letterText =
         seal3.defaultLoveLetter ||
-        "Ma tendre Laura, mon Assistante préférée et Reine absolue de @lau.libraryyy,\n\nJoyeux Noël mon amour ! Que ta bibliothèque continue de grandir et que nous écrivions encore des milliers de chapitres tous les deux.\n\nAvec tout mon amour,\nTon Vilain préféré ❤️";
+        "Ma tendre Laure, mon Assistante préférée et Reine absolue de @lau.libraryyy,\n\nJoyeux Noël mon amour ! Que ta bibliothèque continue de grandir et que nous écrivions encore des milliers de chapitres tous les deux.\n\nAvec tout mon amour,\nTon Vilain préféré ❤️";
 
       stage.innerHTML = `
         <div class="mg-question-box" style="text-align:center; border:2px solid #ffd700; background:linear-gradient(145deg, rgba(45,15,28,0.92), rgba(20,14,32,0.96));">

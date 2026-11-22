@@ -73,7 +73,7 @@ Ton Vilain dévoué pour l’éternité ❤️`;
 
   // Fallback des 12 Secrets si window.MAP_EASTER_EGGS n'est pas encore défini
   const FALLBACK_EASTER_EGGS = [
-    { id: 'egg_kingsley_sign', region: 1, icon: '🪧', title: 'La Pancarte Secrète de Kingsley', hint: 'Cachez-vous près du Bureau du Vilain au Monde I...', text: '« URGENCE : Laura mérite un café chaud et un nouveau livre relié immédiatement ! » — Signé Sire Kingsley.' },
+    { id: 'egg_kingsley_sign', region: 1, icon: '🪧', title: 'La Pancarte Secrète de Kingsley', hint: 'Cachez-vous près du Bureau du Vilain au Monde I...', text: '« URGENCE : Laure mérite un café chaud et un nouveau livre relié immédiatement ! » — Signé Sire Kingsley.' },
     { id: 'egg_vinted_alert', region: 1, icon: '📦', title: 'L’Alerte Vinted Relié Collector', hint: 'Un colis mystérieux brille près des Archives (Monde I)...', text: 'Alerte Vinted : Tomes 2, 3 et 4 de The Bone Season en relié introuvable... juste un mois avant la réédition !' },
     { id: 'egg_aldryn_tide', region: 1, icon: '🌊', title: 'Le Coquillage d’Aldryn', hint: 'Sur les falaises lunaires de l’Académie (Monde I)...', text: 'En collant l’oreille au coquillage, on entend Emory et Baz murmurer : « Vivement le Tome 2 de Curious Tides ! »' },
     { id: 'egg_babel_debate', region: 2, icon: '🏛️', title: 'La Tour du Grand Débat : Babel', hint: 'Une stèle argentée entre le Monde I et le Désert (Monde II)...', text: 'Gravure du couple : « Chef-d’œuvre absolu » (Le Vilain) vs « Mouais, très moyen ! » (@lau.libraryyy).' },
@@ -84,7 +84,7 @@ Ton Vilain dévoué pour l’éternité ❤️`;
     { id: 'egg_powerless_verdict', region: 3, icon: '🚫', title: 'Le Tampon "C’EST NON !"', hint: 'Un marteau de juge scintille au Monde III...', text: 'Verdict officiel de @lau.libraryyy sur les romans BookTok surcotés : Fourth Wing & Powerless recalés à l’entrée !' },
     { id: 'egg_providence_card', region: 4, icon: '🃏', title: 'La Treizième Carte de la Providence', hint: 'Aux abords de la forêt de Pierres-Claires (Monde IV)...', text: 'Le Cauchemar ricane : « Une carte rare : La Carte du Bonheur Éternel. Prix à payer : un bisou au Vilain. »' },
     { id: 'egg_red_city_vial', region: 4, icon: '⚗️', title: 'La Fiole Alchimique de Red City', hint: 'Près du laboratoire doré du Monde IV...', text: 'Distillation d’or pur : 50% passion Bookstagram, 50% fous rires à deux, 100% coup de cœur absolu.' },
-    { id: 'egg_sanctuary_star', region: 4, icon: '⭐', title: 'L’Étoile du 24 Décembre', hint: 'Tout près du Sanctuaire Solaire Final (Monde IV)...', text: 'Une constellation secrète forme les initiales de Laura & son Vilain au-dessus de la Grande Bibliothèque.' }
+    { id: 'egg_sanctuary_star', region: 4, icon: '⭐', title: 'L’Étoile du 24 Décembre', hint: 'Tout près du Sanctuaire Solaire Final (Monde IV)...', text: 'Une constellation secrète forme les initiales de Laure & son Vilain au-dessus de la Grande Bibliothèque.' }
   ];
 
   // Fallback minimal des 24 jours si days_data.js venait à manquer
@@ -253,7 +253,7 @@ Ton Vilain dévoué pour l’éternité ❤️`;
 
   function detectSpeakerRole(speakerStr) {
     const s = String(speakerStr || '').toLowerCase();
-    if (s.includes('laura') || s.includes('héroïne') || s.includes('heroine') || s.includes('assistante') || s.includes('lau')) {
+    if (s.includes('laure') || s.includes('laura') || s.includes('héroïne') || s.includes('heroine') || s.includes('assistante') || s.includes('lau')) {
       return 'laura';
     }
     if (s.includes('kingsley') || s.includes('grenouille') || s.includes('frog')) {
@@ -268,19 +268,19 @@ Ton Vilain dévoué pour l’éternité ❤️`;
       return [
         { speaker: '👑 Le Vilain', role: 'villain', text: 'Nous y voilà, mon Assistante. Les 23 serrures runiques ont cédé une à une devant toi.' },
         { speaker: '🐸 Sire Kingsley', role: 'kingsley', text: '*Ajuste sa couronne dorée* « CROÂ ! La Reine de @lau.libraryyy mérite son coffre légendaire ! »' },
-        { speaker: '✨ Laura', role: 'laura', text: '24 jours à travers nos livres et nos souvenirs… Voyons quel ultime secret tu caches dans ce Sanctuaire !' }
+        { speaker: '✨ Laure', role: 'laura', text: '24 jours à travers nos livres et nos souvenirs… Voyons quel ultime secret tu caches dans ce Sanctuaire !' }
       ];
     }
     if (isBoss) {
       return [
         { speaker: '🐸 Sire Kingsley', role: 'kingsley', text: `*Brandit une pancarte rouge* « ALERTE BOSS DU JOUR ${dayNum} ! Un coffre épique est en jeu ! »` },
         { speaker: '👑 Le Vilain', role: 'villain', text: `Prête à affronter "${title}" (${bookText}) ? Un gros trésor IRL t'attend derrière ce gardien.` },
-        { speaker: '✨ Laura', role: 'laura', text: 'J’ai survécu à des cliffhangers de 900 pages. Ce Boss n’a aucune chance !' }
+        { speaker: '✨ Laure', role: 'laura', text: 'J’ai survécu à des cliffhangers de 900 pages. Ce Boss n’a aucune chance !' }
       ];
     }
     return [
       { speaker: '👑 Le Vilain', role: 'villain', text: `Bienvenue au Jour ${dayNum}, mon Assistante. Cap sur "${title}" (${bookText}).` },
-      { speaker: '✨ Laura', role: 'laura', text: 'Montre-moi l’épreuve que tu as concoctée avec Kingsley pour débloquer ma surprise !' }
+      { speaker: '✨ Laure', role: 'laura', text: 'Montre-moi l’épreuve que tu as concoctée avec Kingsley pour débloquer ma surprise !' }
     ];
   }
 
@@ -609,7 +609,7 @@ Ton Vilain dévoué pour l’éternité ❤️`;
             .join('')}
 
           <div id="fb-hero-sprite" class="wm-hero-sprite">
-            <img src="assets/sprite_laura.png" alt="Laura" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/heroine_avatar.png';}" />
+            <img src="assets/sprite_laura.png" alt="Laure" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/heroine_avatar.png';}" />
           </div>
           <div id="fb-kingsley-sprite" class="wm-kingsley-sprite">
             <img src="assets/sprite_kingsley.png" alt="Kingsley" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/kingsley_avatar.png';}" />
@@ -1254,7 +1254,7 @@ Ton Vilain dévoué pour l’éternité ❤️`;
         <div class="finale-showcase">
           <div class="chapter-eyebrow">✦ PORTRAIT DU VILAIN &amp; DE SON ASSISTANTE ✦</div>
           <div class="finale-couple-frame">
-            <img src="assets/couple_finale.png" alt="Laura &amp; Son Vilain" onerror="this.style.display='none'" />
+            <img src="assets/couple_finale.png" alt="Laure &amp; Son Vilain" onerror="this.style.display='none'" />
           </div>
           <div class="chapter-eyebrow">💌 LA GRANDE LETTRE D'AMOUR DU VILAIN 💌</div>
           <div class="love-letter-box">${escapeHtml(AppState.finaleLoveLetter)}</div>

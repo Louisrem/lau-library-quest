@@ -8,7 +8,7 @@
  * - Espace monde 2000 × 1125 (16:9) calé sur assets/world_overworld_map.png
  * - Caméra Pan & Zoom 60fps (souris, tactile, molette centrée curseur, pinch)
  * - 24 nœuds de niveau reliés par une spline Catmull-Rom double couche Éther
- * - Chibi Laura qui marche réellement sur la courbe + Kingsley en suivi fluide
+ * - Chibi Laure qui marche réellement sur la courbe + Kingsley en suivi fluide
  *   + Le Vilain Chibi interactif + Le navire pirate Le Maram en navigation
  * - 12 Easter Eggs cliquables cachés dans les 4 biomes (persistés localStorage)
  * - Canvas ambiant (nuages doux, lucioles d'Éther, neige au Nord-Est, étincelles)
@@ -123,7 +123,7 @@
   // Petits mots doux aléatoires du Vilain (ton copain)
   const VILLAIN_LOVE_NOTES = [
     "« Chut... Ne le dis à personne, mais tu es de loin la meilleure Assistante (et la plus incroyable des copines) de tout le multivers. ❤️ »",
-    "« J'ai caché 24 petits bouts de nous sur cette carte. Prends ton temps, un café chaud à la main, et profite de chaque étape, ma Laura ! ☕✨ »",
+    "« J'ai caché 24 petits bouts de nous sur cette carte. Prends ton temps, un café chaud à la main, et profite de chaque étape, ma Laure ! ☕✨ »",
     "« Entre nous : même si tu critiques *Babel* encore 100 fois, je t'aimerai toujours plus que toutes les bibliothèques du monde réunies. 🏛️💛 »",
     "« Kingsley m'a soufflé une pancarte secrète : « CÂLIN ILLIMITÉ VALABLE DÈS QUE TU FERMES L'ÉCRAN ! » 🐸💕 »",
     "« De nos verres à Mons jusqu'aux sentiers d'Irlande, chaque aventure avec toi vaut mille fois tous les romans de fantasy. ☘️🌙 »",
@@ -161,7 +161,7 @@
       icon: '🐉',
       biome: 3,
       title: 'Le Dragon « Bof » de Fourth Wing',
-      text: "Zzz... Tout BookTok hurle au chef-d'œuvre, mais Laura lève les yeux au ciel et passe son chemin."
+      text: "Zzz... Tout BookTok hurle au chef-d'œuvre, mais Laure lève les yeux au ciel et passe son chemin."
     },
     {
       id: 'babel_tower',
@@ -271,7 +271,7 @@
   /**
    * Construit une spline Catmull-Rom douce (tension réglable) convertie en
    * courbe de Bézier cubique SVG + table d'échantillonnage par longueur d'arc
-   * pour un déplacement de Laura à vitesse parfaitement constante.
+   * pour un déplacement de Laure à vitesse parfaitement constante.
    */
   function buildSplineGeometry(nodes) {
     const n = nodes.length;
@@ -399,7 +399,7 @@
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
-  background: radial-gradient(circle at 50% 45%, #0d214f 0%, #061028 60%, #030714 100%);
+  background: radial-gradient(circle at 50% 45%, #efe4cf 0%, #e4d5b9 65%, #d6c3a3 100%);
   font-family: var(--font-ui, 'Plus Jakarta Sans', system-ui, sans-serif);
 }
 
@@ -415,13 +415,8 @@
   height: 1125px;
   transform-origin: 0 0;
   will-change: transform;
-  background:
-    radial-gradient(ellipse at 25% 75%, rgba(28, 72, 118, 0.55) 0%, transparent 45%),
-    radial-gradient(ellipse at 78% 72%, rgba(168, 112, 48, 0.35) 0%, transparent 45%),
-    radial-gradient(ellipse at 28% 30%, rgba(168, 52, 48, 0.32) 0%, transparent 45%),
-    radial-gradient(ellipse at 78% 24%, rgba(125, 211, 252, 0.35) 0%, transparent 45%),
-    linear-gradient(155deg, #0b1c3d 0%, #102a52 50%, #08152e 100%);
-  box-shadow: 0 0 120px rgba(0, 0, 0, 0.85);
+  background: #f2e7d2;
+  box-shadow: 0 0 80px rgba(45, 30, 18, 0.35);
 }
 
 .ow-bg-map {
@@ -432,14 +427,14 @@
   object-fit: cover;
   pointer-events: none;
   display: block;
-  filter: saturate(1.06) contrast(1.03);
+  filter: contrast(1.02);
 }
 
 .ow-map-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 110px rgba(3, 8, 24, 0.58);
+  box-shadow: inset 0 0 95px rgba(56, 38, 22, 0.24);
 }
 
 /* Couche SVG du chemin sinueux */
@@ -454,36 +449,35 @@
 
 .ow-path-shadow {
   fill: none;
-  stroke: rgba(4, 10, 28, 0.62);
-  stroke-width: 15;
+  stroke: rgba(35, 26, 22, 0.24);
+  stroke-width: 10;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .ow-path-track {
   fill: none;
-  stroke: rgba(246, 211, 101, 0.45);
-  stroke-width: 8;
+  stroke: rgba(110, 78, 48, 0.48);
+  stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 12 14;
+  stroke-dasharray: 10 10;
 }
 
 .ow-path-ether-glow {
   fill: none;
-  stroke: url(#ow-ether-grad);
-  stroke-width: 13;
+  stroke: rgba(181, 73, 58, 0.32);
+  stroke-width: 9;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.65;
-  filter: url(#ow-glow-ether);
+  opacity: 0.85;
   transition: stroke-dashoffset 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ow-path-ether-core {
   fill: none;
-  stroke: #fef08a;
-  stroke-width: 4.5;
+  stroke: #b5493a;
+  stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0.95;
@@ -492,17 +486,16 @@
 
 .ow-fast-travel-arc {
   fill: none;
-  stroke: url(#ow-ether-grad);
-  stroke-width: 6;
+  stroke: #231a16;
+  stroke-width: 3.5;
   stroke-linecap: round;
-  stroke-dasharray: 10 10;
-  filter: url(#ow-glow-ether);
+  stroke-dasharray: 8 8;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .ow-fast-travel-arc.is-active {
-  opacity: 0.95;
+  opacity: 0.75;
   animation: owDashFlow 0.6s linear infinite;
 }
 
@@ -834,7 +827,7 @@
   pointer-events: none;
 }
 
-/* Nœud Actuel (où se trouve Laura) */
+/* Nœud Actuel (où se trouve Laure) */
 .ow-node.is-current {
   border-color: #fef08a;
   box-shadow:
@@ -1027,7 +1020,7 @@
   transform: translateX(-50%) translateY(2px);
 }
 
-/* Couche Personnages (Laura, Kingsley, Le Vilain) */
+/* Couche Personnages (Laure, Kingsley, Le Vilain) */
 .ow-actors-layer {
   position: absolute;
   inset: 0;
@@ -1053,7 +1046,7 @@
   pointer-events: none;
 }
 
-/* Laura Chibi */
+/* Laure Chibi */
 .ow-laura {
   width: 88px;
   height: 98px;
@@ -1514,7 +1507,7 @@
       this.lastPinchMidY = 0;
       this.lastNodeClick = { day: 0, time: 0 };
 
-      // État Héros (Laura & Kingsley)
+      // État Héros (Laure & Kingsley)
       this.laura = {
         x: LEVEL_NODES[0].x,
         y: LEVEL_NODES[0].y,
@@ -1533,7 +1526,7 @@
         hopPhase: 0
       };
 
-      // Historique de trajectoire de Laura pour le délai fluide de Kingsley (~180ms)
+      // Historique de trajectoire de Laure pour le délai fluide de Kingsley (~180ms)
       this.trailHistory = [];
 
       // État de marche / voyage rapide
@@ -1626,7 +1619,7 @@
       // Construction du DOM plein écran
       this._buildDOM();
 
-      // Placement initial de Laura & Kingsley
+      // Placement initial de Laure & Kingsley
       const startNode = LEVEL_NODES[startDay - 1];
       this.laura.x = startNode.x;
       this.laura.y = startNode.y;
@@ -1641,7 +1634,7 @@
       // Initialisation des couches ambiantes
       this._initAmbientEntities();
 
-      // Calcul taille viewport & cadrage initial autour de Laura
+      // Calcul taille viewport & cadrage initial autour de Laure
       this._updateViewportSize();
       const comfortZoom = clamp(Math.max(this.vpW / 1420, this.vpH / 800), 0.85, 1.22);
       this.cam.zoom = comfortZoom;
@@ -1908,7 +1901,7 @@
       }
       stage.appendChild(nodesLayer);
 
-      // 7. Personnages (Le Vilain Chibi, Kingsley, Laura Chibi)
+      // 7. Personnages (Le Vilain Chibi, Kingsley, Laure Chibi)
       const actorsLayer = document.createElement('div');
       actorsLayer.className = 'ow-actors-layer';
 
@@ -1971,7 +1964,7 @@
       this.kingsleyFlipEl = kingsleyEl.querySelector('.ow-kingsley-flip');
       actorsLayer.appendChild(kingsleyEl);
 
-      // Laura Chibi
+      // Laure Chibi
       const lauraEl = document.createElement('div');
       lauraEl.className = 'ow-actor ow-laura';
       lauraEl.innerHTML = `
@@ -1980,7 +1973,7 @@
         <span class="ow-laura-pointer" aria-hidden="true">▼</span>
         <div class="ow-laura-motion">
           <div class="ow-laura-flip">
-            <img class="ow-laura-sprite" src="assets/sprite_laura.png" alt="Laura" draggable="false" />
+            <img class="ow-laura-sprite" src="assets/sprite_laura.png" alt="Laure" draggable="false" />
           </div>
         </div>
       `;
@@ -2394,7 +2387,7 @@
         this.lastNodeClick.day === dayNum && now - this.lastNodeClick.time < 420;
       this.lastNodeClick = { day: dayNum, time: now };
 
-      // Si Laura est déjà sur ce nœud (et ne marche pas), ouvre directement le niveau !
+      // Si Laure est déjà sur ce nœud (et ne marche pas), ouvre directement le niveau !
       if (dayNum === this.currentDay && !this.travel) {
         this._enterDayIfAllowed(dayNum);
         return;
@@ -2796,7 +2789,7 @@
       if (!this.pathEtherGlowEl || !this.pathEtherCoreEl) return;
       const total = this.spline.totalLength;
 
-      // Éclaire le chemin d'Éther jusqu'au plus haut niveau atteint (complété + 1 ou position de Laura)
+      // Éclaire le chemin d'Éther jusqu'au plus haut niveau atteint (complété + 1 ou position de Laure)
       let highestCompleted = 0;
       for (const d of this.completedDays) {
         if (d > highestCompleted) highestCompleted = d;
@@ -2975,7 +2968,7 @@
       }
       ctx.restore();
 
-      // 4. Étincelles dynamiques (pas de Laura, voyage rapide, secrets, Vilain)
+      // 4. Étincelles dynamiques (pas de Laure, voyage rapide, secrets, Vilain)
       for (let i = this.sparkles.length - 1; i >= 0; i--) {
         const p = this.sparkles[i];
         p.life += dt;
@@ -3021,7 +3014,7 @@
       this.lastFrameTime = now;
       this.elapsedTime += dt;
 
-      // 1. Mise à jour déplacement de Laura
+      // 1. Mise à jour déplacement de Laure
       this._updateHeroAndCompanion(dt);
 
       // 2. Mise à jour du navire pirate Le Maram
@@ -3093,7 +3086,7 @@
           }
         }
 
-        // La caméra suit Laura en douceur pendant le trajet
+        // La caméra suit Laure en douceur pendant le trajet
         if (this.cam.followHero) {
           this.cam.targetX = this.laura.x;
           this.cam.targetY = this.laura.y - 22;
@@ -3118,7 +3111,7 @@
         this.trailHistory.shift();
       }
 
-      // Position cible de Kingsley (décalée de 180ms derrière Laura)
+      // Position cible de Kingsley (décalée de 180ms derrière Laure)
       const lagTime = this.elapsedTime - 0.18;
       let sampleLag = this.trailHistory[0];
       for (let i = this.trailHistory.length - 1; i >= 0; i--) {
@@ -3141,7 +3134,7 @@
         this.kingsley.facing = this.laura.facing;
       }
 
-      // Animations visuelles Laura (idle respiration vs balancement/sautillement marche)
+      // Animations visuelles Laure (idle respiration vs balancement/sautillement marche)
       if (isMoving) {
         this.laura.walkPhase += dt * (this.travel && this.travel.mode === 'fast' ? 16 : 14);
         const hopY = -Math.abs(Math.sin(this.laura.walkPhase)) * (10 * moveSpeedRatio);

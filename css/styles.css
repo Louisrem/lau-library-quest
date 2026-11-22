@@ -1056,7 +1056,7 @@ body.title-active .game-hud {
   50% { box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65), 0 0 46px rgba(254, 243, 199, 0.95); }
 }
 
-/* Sprites Chibi Laura & Sire Kingsley sur la carte */
+/* Sprites Chibi Laure & Sire Kingsley sur la carte */
 .wm-hero-sprite,
 .wm-kingsley-sprite {
   position: absolute;
@@ -2336,4 +2336,435 @@ body.title-active .game-hud {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+
+/* ==========================================================================
+   THEME OVERRIDE : CHRONIQUE DES SILENCIEUX (LIGNE CLAIRE / ÉDITORIAL VINTAGE)
+   ========================================================================== */
+:root {
+  --bg-void: #e6dac5;
+  --bg-sapphire: #2a1f19;
+  --glass-bg: rgba(245, 236, 217, 0.96);
+  --glass-bg-strong: rgba(242, 231, 209, 0.98);
+  --glass-bg-soft: rgba(235, 222, 198, 0.92);
+  --glass-hover: #efe3cb;
+
+  --border-gold: #231a16;
+  --border-gold-strong: #231a16;
+  --border-platinum: rgba(35, 26, 22, 0.25);
+  --border-crimson: #b5493a;
+  --border-emerald: #4c6844;
+
+  --gold-light: #f9e8b2;
+  --gold-main: #d49b35;
+  --gold-deep: #b87e22;
+  --gold-bronze: #8a5d19;
+  --ether-cyan: #3e5469;
+  --ether-blue: #3e5469;
+  --crimson-bright: #c95746;
+  --crimson-main: #b5493a;
+  --crimson-deep: #7f2d22;
+  --emerald-bright: #5e7d55;
+  --emerald-main: #4c6844;
+
+  --text-primary: #231a16;
+  --text-ivory: #231a16;
+  --text-secondary: #4a3a31;
+  --text-muted: #705b4f;
+
+  --shadow-glass: 3px 3px 0 rgba(35, 26, 22, 0.26);
+  --shadow-modal: 6px 6px 0 rgba(35, 26, 22, 0.34);
+  --shadow-gold: 2px 2px 0 rgba(35, 26, 22, 0.35);
+}
+
+/* Grain papier subtil sur tout le jeu */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.045;
+  background-image: radial-gradient(#231a16 0.65px, transparent 0.65px);
+  background-size: 3px 3px;
+}
+
+#ambient-particles-canvas {
+  opacity: 0.28 !important;
+}
+
+/* Surfaces Parchment & Encre */
+.glass-surface {
+  background: #f5ecd9;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 2px solid #231a16;
+  box-shadow: 3px 3px 0 rgba(35, 26, 22, 0.26);
+  color: #231a16;
+}
+
+.glass-modal {
+  background: #f6eedc;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 2.5px solid #231a16;
+  box-shadow: 7px 7px 0 rgba(35, 26, 22, 0.36);
+  color: #231a16;
+}
+
+/* Écran Titre — Style Affiche "Chronique des Silencieux" */
+.title-screen-overlay {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(248, 226, 174, 0.92) 0%, rgba(229, 183, 105, 0.94) 55%, rgba(193, 108, 63, 0.96) 100%) !important;
+}
+
+.title-screen-aurora {
+  display: none !important;
+}
+
+.title-eyebrow {
+  color: #231a16 !important;
+  border-color: rgba(35, 26, 22, 0.35) !important;
+  background: rgba(245, 236, 217, 0.72) !important;
+  border: 1.5px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.22);
+}
+
+.title-main-heading {
+  color: #1e1511 !important;
+  text-shadow: 2px 2px 0 rgba(245, 236, 217, 0.65) !important;
+  background: none !important;
+  -webkit-text-fill-color: #1e1511 !important;
+}
+
+.title-subtitle {
+  color: #3d2c23 !important;
+}
+
+.title-hint {
+  color: #2f221b !important;
+  background: rgba(245, 236, 217, 0.68);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(35, 26, 22, 0.35);
+}
+
+.chibi-medallion {
+  background: #f5ecd9 !important;
+  border: 2.5px solid #231a16 !important;
+  box-shadow: 4px 4px 0 rgba(35, 26, 22, 0.28) !important;
+}
+
+.chibi-medallion img {
+  filter: none !important;
+}
+
+.chibi-tag {
+  background: #231a16 !important;
+  color: #f5ecd9 !important;
+  border: 1.5px solid #d49b35 !important;
+}
+
+.btn-start-adventure {
+  background: #b5493a !important;
+  color: #fdf7eb !important;
+  border: 2.5px solid #231a16 !important;
+  box-shadow: 4px 4px 0 #231a16 !important;
+  text-shadow: none !important;
+}
+
+.btn-start-adventure:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 5px 5px 0 #231a16 !important;
+  background: #c55444 !important;
+}
+
+.btn-start-glow {
+  display: none !important;
+}
+
+/* HUD Flottant — Laiton, Parchemin & Encre */
+.hud-avatar-ring {
+  border: 2px solid #231a16 !important;
+  background: #e9dec7 !important;
+  box-shadow: none !important;
+}
+
+.hud-stat-chip {
+  color: #231a16 !important;
+}
+
+.hud-stat-val {
+  color: #231a16 !important;
+  font-weight: 800;
+}
+
+.hud-micro-progress {
+  background: rgba(35, 26, 22, 0.14) !important;
+  border: 1px solid rgba(35, 26, 22, 0.25);
+}
+
+.hud-micro-progress-fill {
+  background: linear-gradient(90deg, #b5493a, #d49b35) !important;
+  box-shadow: none !important;
+}
+
+.hud-icon-btn {
+  background: #f5ecd9 !important;
+  color: #231a16 !important;
+  border: 2px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.26) !important;
+}
+
+.hud-icon-btn:hover {
+  background: #e4b242 !important;
+  color: #231a16 !important;
+}
+
+.hud-mode-btn.is-unlocked {
+  background: #4c6844 !important;
+  color: #f8f2e4 !important;
+}
+
+/* Barre du bas (Dialogue / Niveau actif) */
+.bottom-stage-dock {
+  background: #231a16 !important;
+  color: #f5ecd9 !important;
+  border: 2px solid #d49b35 !important;
+  box-shadow: 4px 4px 0 rgba(35, 26, 22, 0.35) !important;
+}
+
+.stage-day-badge {
+  background: #d49b35 !important;
+  color: #231a16 !important;
+  border: 1.5px solid #231a16 !important;
+}
+
+.stage-title {
+  color: #f9f1e1 !important;
+}
+
+.stage-sub {
+  color: #d6c8b2 !important;
+}
+
+.stage-nav-btn {
+  background: #362922 !important;
+  color: #f5ecd9 !important;
+  border: 1.5px solid #d49b35 !important;
+}
+
+.stage-nav-btn:hover {
+  background: #d49b35 !important;
+  color: #231a16 !important;
+}
+
+.btn-play-stage {
+  background: #b5493a !important;
+  color: #fdf7eb !important;
+  border: 2px solid #f5ecd9 !important;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45) !important;
+}
+
+.btn-play-stage:hover {
+  background: #c95746 !important;
+}
+
+/* Nœuds de la Carte du Monde — Médaillons Laiton & Encre */
+.ow-node {
+  border: 2.5px solid #231a16 !important;
+  background: radial-gradient(circle at 35% 28%, #f3cb68 0%, #d49b35 72%, #b57b20 100%) !important;
+  box-shadow: 2px 3px 0 rgba(35, 26, 22, 0.42) !important;
+  color: #231a16 !important;
+}
+
+.ow-node-num {
+  text-shadow: none !important;
+  color: #231a16 !important;
+}
+
+.ow-node:hover {
+  border-color: #231a16 !important;
+  box-shadow: 3px 4px 0 rgba(35, 26, 22, 0.55) !important;
+}
+
+.ow-node.is-current {
+  border-color: #231a16 !important;
+  background: radial-gradient(circle at 35% 28%, #fde38a 0%, #e4b242 75%, #c48b22 100%) !important;
+  box-shadow: 0 0 0 4px rgba(181, 73, 58, 0.45), 3px 4px 0 rgba(35, 26, 22, 0.5) !important;
+}
+
+.ow-node.is-current .ow-node-ring {
+  border-color: #b5493a !important;
+}
+
+.ow-node.is-completed {
+  background: radial-gradient(circle at 35% 28%, #708e66 0%, #4c6844 75%, #374c31 100%) !important;
+  color: #f8f2e4 !important;
+}
+
+.ow-node.is-completed .ow-node-num {
+  color: #f8f2e4 !important;
+}
+
+.ow-node-check {
+  background: #f5ecd9 !important;
+  border: 2px solid #231a16 !important;
+  color: #4c6844 !important;
+}
+
+.ow-node.is-locked {
+  background: #dfd4be !important;
+  border-color: #6b5a4e !important;
+  color: #6b5a4e !important;
+  filter: none !important;
+  opacity: 0.82;
+}
+
+.ow-node.is-locked .ow-node-num {
+  color: #6b5a4e !important;
+}
+
+.ow-node-lock {
+  background: #f5ecd9 !important;
+  border: 1.5px solid #231a16 !important;
+}
+
+.ow-node.is-boss {
+  background: radial-gradient(circle at 35% 28%, #d26252 0%, #b5493a 70%, #862f23 100%) !important;
+  border-color: #231a16 !important;
+}
+
+.ow-node.is-boss .ow-node-num {
+  color: #fdf7eb !important;
+}
+
+.ow-node.is-finale {
+  background: radial-gradient(circle at 35% 28%, #fae084 0%, #d49b35 65%, #b5493a 100%) !important;
+  border-color: #231a16 !important;
+}
+
+.ow-node.is-finale .ow-node-num {
+  color: #231a16 !important;
+}
+
+.ow-node-label {
+  background: #f5ecd9 !important;
+  border: 1.5px solid #231a16 !important;
+  color: #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.25) !important;
+}
+
+.ow-node.is-boss .ow-node-label {
+  background: #b5493a !important;
+  color: #fdf7eb !important;
+  border-color: #231a16 !important;
+}
+
+.ow-node.is-finale .ow-node-label {
+  background: #231a16 !important;
+  color: #f3cb68 !important;
+  border-color: #d49b35 !important;
+}
+
+/* Proportions Ligne Claire des personnages sur la carte (plus de chibi) */
+.ow-laura {
+  width: 64px !important;
+  height: 118px !important;
+  margin-left: -32px !important;
+  margin-top: -110px !important;
+}
+
+.ow-laura-sprite {
+  width: 62px !important;
+  height: 116px !important;
+  filter: drop-shadow(0 3px 3px rgba(35, 26, 22, 0.45)) !important;
+}
+
+.ow-laura-aura {
+  display: none !important;
+}
+
+.ow-laura-pointer {
+  color: #b5493a !important;
+  text-shadow: 0 1px 0 #f5ecd9 !important;
+}
+
+.ow-villain {
+  width: 68px !important;
+  height: 122px !important;
+  margin-left: -34px !important;
+  margin-top: -114px !important;
+}
+
+.ow-villain-sprite {
+  width: 66px !important;
+  height: 120px !important;
+  filter: drop-shadow(0 3px 3px rgba(35, 26, 22, 0.45)) !important;
+}
+
+.ow-kingsley-sprite {
+  filter: drop-shadow(0 3px 2px rgba(35, 26, 22, 0.4)) !important;
+}
+
+.ow-actor-shadow {
+  background: radial-gradient(ellipse, rgba(35, 26, 22, 0.42) 0%, transparent 72%) !important;
+}
+
+/* Easter Eggs — Jetons Laiton style Chronique des Silencieux */
+.ow-egg {
+  background: #e4b242 !important;
+  border: 2px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.42) !important;
+  color: #231a16 !important;
+}
+
+.ow-egg:hover {
+  background: #f3cb68 !important;
+}
+
+.ow-egg.is-found {
+  background: #4c6844 !important;
+  color: #f5ecd9 !important;
+}
+
+/* Modales & Visual Novel — Lisibilité Parchemin & Encre */
+.modal-header {
+  border-bottom: 1.5px solid rgba(35, 26, 22, 0.2) !important;
+}
+
+.modal-title {
+  color: #231a16 !important;
+}
+
+.modal-close-btn {
+  background: #e9dec7 !important;
+  color: #231a16 !important;
+  border: 1.5px solid #231a16 !important;
+}
+
+.vn-dialogue-box {
+  background: #231a16 !important;
+  color: #f5ecd9 !important;
+  border: 2px solid #d49b35 !important;
+}
+
+.vn-speaker-badge {
+  background: #d49b35 !important;
+  color: #231a16 !important;
+}
+
+.vn-text {
+  color: #f5ecd9 !important;
+}
+
+.vn-char-card {
+  background: #f5ecd9 !important;
+  border: 2px solid #231a16 !important;
+  box-shadow: 3px 3px 0 rgba(35, 26, 22, 0.25) !important;
+}
+
+.vn-char-name {
+  color: #231a16 !important;
 }

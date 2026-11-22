@@ -23,7 +23,7 @@
   window.STORY_INTRO = {
     gameTitle: "L'Assistante du Vilain & Le Multivers de @lau.libraryyy",
     gameSubtitle: "Calendrier de l'Avent RPG Littéraire — 24 Jours dans nos Livres & Souvenirs",
-    heroineName: "Laura",
+    heroineName: "Laure",
     heroineHandle: "@lau.libraryyy",
     heroineTitle: "Grande Archiviste du Multivers & Assistante Principale du Vilain",
     villainName: "Le Vilain (Ton Chéri)",
@@ -176,9 +176,9 @@
     { title: "Un destin forgé dans le feu, La Voie Éternelle (The Raven Scholar) & A Monsoon Rising", author: "Hazel McBride / Antonia Hodgson / Thea Guanzon", tier: "Sentinelles du Sanctuaire", note: "Forgerons célestes, érudits du Corbeau et moussons guerrières.", featuredDays: [21, 23] },
     { title: "Heartless Hunter (The Crimson Moth) & Rebel Witch", author: "Kristen Ciccarelli", tier: "Duel Écarlate", note: "Rune Winters (la Phalène Écarlate) face à Gideon Sharpe.", featuredDays: [8] },
     { title: "Spark of the Everflame (Kindred's Curse)", author: "Penn Cole", tier: "Flamme Éternelle", note: "Diem Bellator, Luther Corbois et l'étincelle des Descendants.", featuredDays: [9, 18] },
-    { title: "The Prison Healer", author: "Lynette Noni", tier: "Standalone Officiel du Cœur", note: "Dans le canon de Laura, SEUL le Tome 1 à Zalindov existe. Point final !", featuredDays: [11] },
+    { title: "The Prison Healer", author: "Lynette Noni", tier: "Standalone Officiel du Cœur", note: "Dans le canon de Laure, SEUL le Tome 1 à Zalindov existe. Point final !", featuredDays: [11] },
     { title: "Yellowface & La Maison des Sortilèges (Weyward)", author: "R.F. Kuang / Emilia Hart", tier: "Satire & Sorcellerie", note: "Le vol du manuscrit d'Athena Liu et les trois lignées de sorcières de Weyward.", featuredDays: [11] },
-    { title: "Babel", author: "R.F. Kuang", tier: "Le Grand Débat du Couple", note: "Chef-d'œuvre absolu selon le Vilain... très moyen selon Laura !", featuredDays: [5, 11] },
+    { title: "Babel", author: "R.F. Kuang", tier: "Le Grand Débat du Couple", note: "Chef-d'œuvre absolu selon le Vilain... très moyen selon Laure !", featuredDays: [5, 11] },
     { title: "Fourth Wing", author: "Rebecca Yarros", tier: "Verdict : Surcoté !", note: "Tairn et Xaden Riorson sont là, mais BookTok a clairement exagéré.", featuredDays: [5] },
     { title: "Jade City (Les Os d'Émeraude)", author: "Fonda Lee", tier: "DNF après le Tome 1", note: "Les clans de Janloon (Sans-Cime et Montagne) sont restés au Tome 1.", featuredDays: [5] },
     { title: "Une braise sous la cendre", author: "Sabaa Tahir", tier: "Classique Ardent", note: "Laia, Elias et l'Académie de Blackcliff.", featuredDays: [12, 18] },
@@ -685,7 +685,7 @@
             clue: "Rouleau 1 (*Babel*) : Première lettre du métal précieux sur lequel sont gravées les barres de traduction magiques de l'Institut Royal d'Oxford.",
             targetLetter: "A",
             fullAnswerWord: "ARGENT",
-            unlockQuip: "« A comme Argent ! » (Le Vilain murmure : 'Avoue quand même que le système de magie par étymologie était génial...' / Laura : 'Mouais, moyen !')"
+            unlockQuip: "« A comme Argent ! » (Le Vilain murmure : 'Avoue quand même que le système de magie par étymologie était génial...' / Laure : 'Mouais, moyen !')"
           },
           {
             id: "dial_2",
@@ -1129,7 +1129,7 @@
         clues: [
           "Indice Logique 1 : Effy Sayre (*Un passé englouti* d'Ava Reid), venue étudier l'architecture du manoir d'Hiraeth et le mythe du Roi des Aulnes en attendant que tu lises son Tome 2, ne boit JAMAIS de bière houblonnée : elle a commandé l'**Hydromel des Brumes Salées**.",
           "Indice Logique 2 : La lectrice qui garde précieusement la **Trilogie des Blasons de Carmidor** (les 3 tomes d'Olivia Gometz dévorés !) déguste la **Triple d'Abbaye aux Épices** en papotant avec l'autrice au stand.",
-          "Indice Logique 3 : L'héroïne de **Nell Pfeiffer** (*Ceux qu'on implore à la terre*) a levé sa chope de **Cuvée des Trolls Ambrée** pour trinquer avec le Vilain et Laura à Mons.",
+          "Indice Logique 3 : L'héroïne de **Nell Pfeiffer** (*Ceux qu'on implore à la terre*) a levé sa chope de **Cuvée des Trolls Ambrée** pour trinquer avec le Vilain et Laure à Mons.",
           "Indice Logique 4 : Celle qui boit l'**Hydromel des Brumes Salées** protège le **Manuscrit Englouti du Roi des Aulnes** contre la marée montante.",
           "Indice Logique 5 : Le **Sceau d'Argile des Prières de la Terre** n'appartient ni à Effy Sayre ni à l'héroïne d'Olivia Gometz."
         ],
@@ -1249,7 +1249,7 @@
               "Parchemin V : « Selon *Les mémoires d'un expert psychiatre* du Manoir, ton chéri déteste *Babel* qu'il trouve très moyen, alors que toi tu lui as mis 20/20 en pleurant d'émotion devant tant de génie. »",
             isTrue: false,
             explanation:
-              "FAUX ARCHI-FAUX ! C'est exactement l'inverse : le Vilain voue un culte à *Babel*, tandis que Laura a rendu un verdict implacable : 'Moyen' !"
+              "FAUX ARCHI-FAUX ! C'est exactement l'inverse : le Vilain voue un culte à *Babel*, tandis que Laure a rendu un verdict implacable : 'Moyen' !"
           }
         ],
         hints: [
@@ -2679,7 +2679,7 @@
       rarity: "legendary",
       tarotArcana: "XXII. L'Éternité du Vilain & de son Assistante (@lau.libraryyy)",
       tarotSymbol: "👑💖✨",
-      location: "Le Sanctuaire Astral au Cœur du Multivers de Laura",
+      location: "Le Sanctuaire Astral au Cœur du Multivers de Laure",
       companion: "both",
       introDialogue: [
         {
@@ -2769,13 +2769,13 @@
               clue: "5e lettre : Comme **R**ed City, **R**in de Sinegard (*The Poppy War*) ou **R**une Winters (*Heartless Hunter*)."
             }
           ],
-          expectedFinalWords: ["AMOUR", "LAURA", "L'AMOUR"],
+          expectedFinalWords: ["AMOUR", "LAURE", "LAURA", "L'AMOUR"],
           placeholder: "Tape le mot de 5 lettres formé par l'acrostiche (A-M-O-U-R ou L-A-U-R-A)..."
         },
         seal3: {
           title: "Troisième Sceau — La Lettre d'Amour du Vilain à son Assistante Préférée",
           illustrationAsset: "assets/couple_finale.png",
-          defaultLoveLetter: `Ma tendre Laura, mon Assistante préférée et Reine absolue de @lau.libraryyy,
+          defaultLoveLetter: `Ma tendre Laure, mon Assistante préférée et Reine absolue de @lau.libraryyy,
 
 Si tu lis cette lettre au cœur du Sanctuaire Étoilé, c'est que tu as triomphé des 24 portes, déjoué mes quiz trolls, survécu aux 4 Boss Épiques et réuni toutes les runes de notre multivers.
 
@@ -2794,7 +2794,7 @@ Avec tout mon amour (et promis, aucune réédition surprise sous le sapin),
 Ton Vilain préféré ❤️`
         },
         hints: [
-          "Indice 1 : Active d'abord les 4 piliers de la Rosace Astrale. Ensuite, les premières lettres des 5 lignes de l'acrostiche sont A - M - O - U - R (tu peux aussi taper LAURA !).",
+          "Indice 1 : Active d'abord les 4 piliers de la Rosace Astrale. Ensuite, les premières lettres des 5 lignes de l'acrostiche sont A - M - O - U - R (tu peux aussi taper LAURE !).",
           "Indice Lunaire 🌙 : Clique sur les 4 piliers dorés, puis tape **AMOUR** (ou **LAURA**) pour desceller la Lettre Finale du Vilain et révéler le Coffre Légendaire !"
         ],
         victoryLore:
