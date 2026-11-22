@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>L'Assistante du Vilain &amp; Le Multivers de @lau.libraryyy</title>
+  <meta name="description" content="Calendrier de l'Avent RPG interactif sur carte du monde vivante : 24 chapitres, 4 mondes, 12 secrets cachés et trésors IRL pour @lau.libraryyy." />
+
+  <!-- Typographies : Cinzel (Noblesse JRPG), Plus Jakarta Sans (UI ultra-nette), Cormorant Garamond (Dialogues) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Design System 2026 : Zero-UI / Liquid Glass / JRPG Moderne -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="title-active">
+  <!-- Canvas de Particules Étoilées Ambiantes -->
+  <canvas id="ambient-particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- ========================================================================
+       1. CARTE DU MONDE 100% PLEIN ÉCRAN (100vw × 100vh)
+       ======================================================================== -->
+  <main id="overworld-viewport" class="overworld-viewport" aria-label="Carte du Monde du Multivers de @lau.libraryyy">
+    <div id="world-map-root" class="world-map-root"></div>
+  </main>
+
+  <!-- ========================================================================
+       2. ÉCRAN TITRE CINÉMATIQUE (OVERLAY D'ENTRÉE JRPG)
+       ======================================================================== -->
+  <section id="title-screen-overlay" class="title-screen-overlay active" role="dialog" aria-modal="true" aria-labelledby="title-main-heading">
+    <div class="title-screen-aurora" aria-hidden="true"></div>
+    <div class="title-screen-content">
+      <div class="title-eyebrow">
+        <span class="title-star">✦</span>
+        <span>CALENDRIER RPG LITTÉRAIRE • 24 ARCANES</span>
+        <span class="title-star">✦</span>
+      </div>
+
+      <!-- Portraits Chibi côte à côte -->
+      <div class="title-chibi-trio" aria-label="Laura, Sire Kingsley et Le Vilain">
+        <div class="chibi-medallion chibi-laura">
+          <img
+            src="assets/sprite_laura.png"
+            alt="Chibi Laura"
+            onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/heroine_avatar.png';}"
+          />
+          <span class="chibi-tag">Laura</span>
+        </div>
+        <div class="chibi-medallion chibi-kingsley">
+          <img
+            src="assets/sprite_kingsley.png"
+            alt="Chibi Sire Kingsley"
+            onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/kingsley_avatar.png';}"
+          />
+          <span class="chibi-tag">Kingsley</span>
+        </div>
+        <div class="chibi-medallion chibi-villain">
+          <img
+            src="assets/sprite_villain.png"
+            alt="Chibi Le Vilain"
+            onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/villain_avatar.png';}"
+          />
+          <span class="chibi-tag">Le Vilain</span>
+        </div>
+      </div>
+
+      <h1 id="title-main-heading" class="title-main-heading">L'Assistante du Vilain</h1>
+      <p class="title-subtitle">Le Multivers de @lau.libraryyy • Calendrier RPG</p>
+
+      <button id="btn-start-adventure" class="btn-start-adventure" type="button">
+        <span class="btn-start-glow" aria-hidden="true"></span>
+        <span class="btn-start-icon">▶</span>
+        <span>COMMENCER L'AVENTURE</span>
+      </button>
+
+      <p class="title-hint">
+        Explore les 4 Mondes • Déniche les 12 Secrets Cachés • Débloque tes 24 Surprises IRL
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. HUD FLOTTANT MINIMALISTE (LIQUID GLASS SAPHIR & OR)
+       ======================================================================== -->
+  <div id="game-hud" class="game-hud" aria-label="Interface du jeu">
+
+    <!-- COIN HAUT-GAUCHE : Pilule de Profil Compacte -->
+    <div class="hud-top-left">
+      <div class="hud-profile-pill glass-surface">
+        <button id="hud-avatar-btn" class="hud-avatar-ring" type="button" title="Centrer la caméra sur Laura">
+          <img src="assets/heroine_avatar.png" alt="Laura" onerror="this.style.opacity='0'" />
+        </button>
+
+        <div class="hud-profile-meta">
+          <div class="hud-counters-row">
+            <button id="hud-runes-btn" class="hud-stat-chip" type="button" title="Runes &amp; Trésors débloqués">
+              <span class="hud-stat-icon">🗝️</span>
+              <span id="hud-runes-count" class="hud-stat-val">0/24</span>
+            </button>
+            <span class="hud-stat-sep" aria-hidden="true"></span>
+            <button id="hud-secrets-btn" class="hud-stat-chip hud-stat-secrets" type="button" title="Ouvrir le Journal des 12 Secrets de la Carte">
+              <span class="hud-stat-icon">✨</span>
+              <span id="hud-secrets-count" class="hud-stat-val">0/12</span>
+            </button>
+          </div>
+          <div class="hud-micro-progress" role="progressbar" aria-valuemin="0" aria-valuemax="24" aria-valuenow="0">
+            <div id="hud-runes-bar-fill" class="hud-micro-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badge discret de la Maison d'Aldryn (affiché une fois débloqué au Jour 4) -->
+      <button id="hud-aldryn-badge" class="hud-aldryn-pill glass-surface" type="button" title="Maison Lunaire d'Aldryn (Jour 4 : Curious Tides)" style="display:none;">
+        <span id="hud-aldryn-icon" class="hud-aldryn-icon">🌙</span>
+        <span id="hud-aldryn-name" class="hud-aldryn-name">Maison d'Aldryn</span>
+      </button>
+    </div>
+
+    <!-- COIN HAUT-DROIT : Dock Compact d'Icônes -->
+    <nav class="hud-top-right" aria-label="Menus du jeu">
+      <div class="hud-icon-dock glass-surface">
+        <button id="hud-btn-loot" class="hud-icon-btn" type="button" data-tooltip="Butin &amp; Bons IRL" aria-label="Grimoire de Butin">
+          <span class="hud-btn-emoji">🎒</span>
+          <span id="hud-loot-badge" class="hud-mini-badge">0</span>
+        </button>
+        <button id="hud-btn-codex" class="hud-icon-btn" type="button" data-tooltip="Codex (35 Livres)" aria-label="Bibliothèque de Lau">
+          <span class="hud-btn-emoji">📜</span>
+        </button>
+        <button id="hud-btn-secrets" class="hud-icon-btn" type="button" data-tooltip="Secrets de la Carte" aria-label="Journal des Secrets">
+          <span class="hud-btn-emoji">✨</span>
+          <span id="hud-secrets-badge" class="hud-mini-badge hud-badge-cyan">0</span>
+        </button>
+        <button id="hud-btn-gm" class="hud-icon-btn" type="button" data-tooltip="Atelier du Vilain (MJ)" aria-label="Atelier du Vilain">
+          <span class="hud-btn-emoji">👑</span>
+        </button>
+
+        <span class="hud-dock-divider" aria-hidden="true"></span>
+
+        <button id="hud-btn-temporal" class="hud-icon-btn hud-mode-free" type="button" data-tooltip="Mode Libre (24/24)" aria-label="Changer le mode temporel">
+          <span id="hud-temporal-icon" class="hud-btn-emoji">🔓</span>
+        </button>
+        <button id="hud-btn-audio" class="hud-icon-btn" type="button" data-tooltip="Son activé" aria-label="Couper ou activer le son">
+          <span id="hud-audio-icon" class="hud-btn-emoji">🔊</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- CÔTÉ DROIT (CENTRÉ) : Mini-Contrôles Caméra & Régions I-IV -->
+    <aside class="hud-camera-rail glass-surface" aria-label="Contrôles de la carte">
+      <button id="cam-zoom-in" class="cam-ctrl-btn" type="button" data-tooltip="Zoom +" aria-label="Zoomer">+</button>
+      <button id="cam-zoom-out" class="cam-ctrl-btn" type="button" data-tooltip="Zoom −" aria-label="Dézoomer">−</button>
+      <button id="cam-center-hero" class="cam-ctrl-btn" type="button" data-tooltip="Centrer sur Laura" aria-label="Centrer sur Laura">🎯</button>
+      <span class="cam-rail-divider" aria-hidden="true"></span>
+      <button class="cam-region-btn active" data-cam-region="1" type="button" data-tooltip="Monde I : Manoir &amp; Aldryn" aria-label="Aller au Monde I">I</button>
+      <button class="cam-region-btn" data-cam-region="2" type="button" data-tooltip="Monde II : Désert &amp; Irlande" aria-label="Aller au Monde II">II</button>
+      <button class="cam-region-btn" data-cam-region="3" type="button" data-tooltip="Monde III : Flammes &amp; Mons" aria-label="Aller au Monde III">III</button>
+      <button class="cam-region-btn" data-cam-region="4" type="button" data-tooltip="Monde IV : Sanctuaire Final" aria-label="Aller au Monde IV">IV</button>
+    </aside>
+
+    <!-- BAS-CENTRE : Barre de Niveau Sélectionné (Style Super Mario Wonder / Unicorn Overlord) -->
+    <div class="hud-bottom-center">
+      <div id="stage-selector-bar" class="stage-bar glass-surface" role="region" aria-label="Niveau sélectionné">
+        <button id="stage-prev-btn" class="stage-nav-arrow" type="button" aria-label="Niveau précédent" title="Jour précédent (←)">‹</button>
+
+        <div class="stage-bar-center">
+          <div class="stage-meta-row">
+            <span id="stage-day-badge" class="stage-day-pill">JOUR 1</span>
+            <span id="stage-book-badge" class="stage-book-pill">📖 Assistant to the Villain</span>
+            <span id="stage-status-badge" class="stage-status-pill status-new">✦ Nouveau</span>
+          </div>
+          <div id="stage-bar-title" class="stage-bar-title">Entretien d'Embauche chez le Vilain</div>
+        </div>
+
+        <button id="stage-play-btn" class="stage-play-btn" type="button">
+          <span id="stage-play-icon">▶</span>
+          <span id="stage-play-label">JOUER</span>
+        </button>
+
+        <button id="stage-next-btn" class="stage-nav-arrow" type="button" aria-label="Niveau suivant" title="Jour suivant (→)">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       4. MODALE DE CHAPITRE (VISUAL NOVEL + ÉPREUVE + SCEAU DE CIRE & COFFRE)
+       ======================================================================== -->
+  <div id="chapter-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-chapter-title">
+    <div id="chapter-modal-container" class="modal-shell chapter-modal-shell glass-modal">
+      <!-- Alerte Boss (Jours 6, 12, 18, 21, 24) -->
+      <div id="modal-boss-banner" class="boss-alert-ribbon" style="display:none;">
+        ⚔️ ALERTE BOSS — COFFRE ÉPIQUE EN JEU ⚔️
+      </div>
+
+      <!-- En-tête Illustré -->
+      <header class="chapter-header">
+        <div id="modal-header-bg" class="chapter-header-bg"></div>
+        <div class="chapter-header-scrim"></div>
+        <button id="modal-close-btn" class="modal-close-x" type="button" aria-label="Fermer le chapitre">✕</button>
+
+        <div class="chapter-header-inner">
+          <div class="chapter-header-titles">
+            <div id="modal-chapter-eyebrow" class="chapter-eyebrow">JOUR 1 • ARCANE I</div>
+            <h2 id="modal-chapter-title" class="chapter-title">Titre du Chapitre</h2>
+            <div id="modal-chapter-books" class="chapter-books-row"></div>
+          </div>
+          <div id="modal-rarity-pill" class="rarity-pill rarity-commun">✦ ARCANE</div>
+        </div>
+      </header>
+
+      <!-- Onglets d'étapes (1. Scène / 2. Épreuve / 3. Sceau & Trésor) -->
+      <div class="stage-tabs-bar" role="tablist">
+        <button class="stage-tab-btn active" data-stage="story" type="button" role="tab">
+          <span>📖</span>
+          <span>1. Scène Narrative</span>
+        </button>
+        <button class="stage-tab-btn" data-stage="game" type="button" role="tab">
+          <span>⚔️</span>
+          <span>2. L'Épreuve</span>
+        </button>
+        <button class="stage-tab-btn" data-stage="loot" id="modal-tab-loot-btn" type="button" role="tab">
+          <span>🕯️</span>
+          <span>3. Sceau &amp; Coffre IRL</span>
+        </button>
+      </div>
+
+      <!-- Corps Scrollable -->
+      <div class="chapter-modal-body">
+        <!-- ÉTAPE 1 : VISUAL NOVEL MODERNE -->
+        <div id="modal-stage-story" class="vn-stage">
+          <div class="vn-portraits-grid">
+            <div id="vn-slot-laura" class="vn-char-card">
+              <div class="vn-portrait-ring">
+                <img src="assets/heroine_laura.png" alt="Laura" onerror="this.style.display='none'" />
+              </div>
+              <span class="vn-nameplate">✨ Laura</span>
+            </div>
+
+            <div id="vn-slot-kingsley" class="vn-char-card">
+              <div class="vn-portrait-ring">
+                <img src="assets/kingsley_frog.png" alt="Sire Kingsley" onerror="this.style.display='none'" />
+              </div>
+              <span class="vn-nameplate">🐸 Sire Kingsley</span>
+            </div>
+
+            <div id="vn-slot-villain" class="vn-char-card">
+              <div class="vn-portrait-ring">
+                <img src="assets/villain_boyfriend.png" alt="Le Vilain" onerror="this.style.display='none'" />
+              </div>
+              <span class="vn-nameplate">👑 Le Vilain</span>
+            </div>
+          </div>
+
+          <div class="vn-dialogue-panel">
+            <div class="vn-speaker-bar">
+              <span id="vn-speaker-badge" class="vn-speaker-name">👑 Le Vilain</span>
+              <span id="vn-line-counter" class="vn-line-count">1 / 3</span>
+            </div>
+
+            <p id="vn-dialogue-text" class="vn-dialogue-copy"></p>
+
+            <div id="vn-transcript-all" class="vn-transcript-list" style="display:none;"></div>
+
+            <div class="vn-actions-row">
+              <div class="vn-nav-left">
+                <button id="vn-prev-btn" class="btn-glass" type="button">← Précédent</button>
+                <button id="vn-next-btn" class="btn-gold" type="button">Suivant →</button>
+                <button id="vn-show-all-btn" class="btn-glass btn-subtle" type="button">📜 Tout lire</button>
+              </div>
+              <button id="vn-start-challenge-btn" class="btn-gold" type="button">
+                ⚔️ Passer à l'Épreuve →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 2 : MINI-JEU -->
+        <div id="modal-stage-game" class="game-stage" style="display:none;">
+          <div id="minigame-mount-root"></div>
+        </div>
+
+        <!-- ÉTAPE 3 : SCEAU DE CIRE & COFFRE IRL -->
+        <div id="modal-stage-loot" class="loot-stage" style="display:none;">
+          <div id="loot-ceremony-root" class="loot-ceremony-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       5. MODALE TIROIR UNIFIÉE (BUTIN / CODEX / SECRETS / ATELIER DU VILAIN)
+       ======================================================================== -->
+  <div id="drawer-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Menu du Grimoire">
+    <div id="drawer-modal-container" class="modal-shell drawer-modal-shell glass-modal">
+      <header class="drawer-header">
+        <div class="drawer-tabs" role="tablist">
+          <button class="drawer-tab-btn active" data-drawer-tab="loot" type="button" role="tab">
+            <span>🎒</span>
+            <span>Butin &amp; Bons</span>
+          </button>
+          <button class="drawer-tab-btn" data-drawer-tab="codex" type="button" role="tab">
+            <span>📜</span>
+            <span>Bibliothèque</span>
+          </button>
+          <button class="drawer-tab-btn" data-drawer-tab="secrets" type="button" role="tab">
+            <span>✨</span>
+            <span>Secrets (12)</span>
+          </button>
+          <button class="drawer-tab-btn" data-drawer-tab="gm" type="button" role="tab">
+            <span>👑</span>
+            <span>Atelier MJ</span>
+          </button>
+        </div>
+        <button id="drawer-close-btn" class="modal-close-x" type="button" aria-label="Fermer le menu">✕</button>
+      </header>
+
+      <div class="drawer-body">
+        <!-- ONGLET 1 : BUTIN & BONS DIGITAUX -->
+        <section id="drawer-panel-loot" class="drawer-panel active">
+          <div class="drawer-section-head">
+            <div>
+              <h2 class="drawer-title">Grimoire de Butin &amp; Bons du Vilain</h2>
+              <p class="drawer-desc">Tes surprises IRL débloquées, cachettes secrètes et bons digitaux à présenter à ton Vilain.</p>
+            </div>
+            <button id="loot-unlock-preview-btn" class="btn-glass" type="button">
+              👁️ Aperçu des 24 trésors
+            </button>
+          </div>
+          <div id="loot-inventory-container" class="cards-grid"></div>
+        </section>
+
+        <!-- ONGLET 2 : BIBLIOTHÈQUE DE LAU (35 LIVRES) -->
+        <section id="drawer-panel-codex" class="drawer-panel">
+          <div class="drawer-section-head">
+            <div>
+              <h2 class="drawer-title">La Bibliothèque de @lau.libraryyy</h2>
+              <p class="drawer-desc">Les 35 romans et clins d'œil qui composent le Multivers : coups de cœur, avis tranchés et souvenirs de couple.</p>
+            </div>
+            <div class="pill-filters" role="group" aria-label="Filtrer la bibliothèque">
+              <button class="pill-filter-btn active" data-codex-filter="all" type="button">Tous</button>
+              <button class="pill-filter-btn" data-codex-filter="fav" type="button">💛 Coups de Cœur</button>
+              <button class="pill-filter-btn" data-codex-filter="roast" type="button">🔥 Avis Tranchés</button>
+              <button class="pill-filter-btn" data-codex-filter="couple" type="button">💑 Couple &amp; Mons</button>
+            </div>
+          </div>
+          <div id="codex-books-container" class="cards-grid"></div>
+        </section>
+
+        <!-- ONGLET 3 : JOURNAL DES 12 EASTER EGGS DE LA CARTE -->
+        <section id="drawer-panel-secrets" class="drawer-panel">
+          <div class="drawer-section-head">
+            <div>
+              <h2 class="drawer-title">Journal des Secrets du Multivers</h2>
+              <p class="drawer-desc">12 Easter Eggs brillent discrètement sur la carte du monde. Clique dessus pendant ton exploration pour révéler des clins d'œil secrets !</p>
+            </div>
+            <div id="secrets-progress-pill" class="secrets-counter-pill">✨ 0 / 12 Découverts</div>
+          </div>
+          <div id="secrets-journal-container" class="cards-grid"></div>
+        </section>
+
+        <!-- ONGLET 4 : ATELIER DU VILAIN (MAÎTRE DU JEU) -->
+        <section id="drawer-panel-gm" class="drawer-panel">
+          <div class="drawer-section-head">
+            <div>
+              <h2 class="drawer-title">L'Atelier du Vilain — Maître du Jeu</h2>
+              <p class="drawer-desc">Personnalise les 24 cadeaux, les cachettes IRL dans la maison et la Grande Lettre d'Amour du 24 Décembre.</p>
+            </div>
+          </div>
+
+          <div class="gm-toolbar">
+            <a href="lau-library-quest-ff-edition.zip" download="lau-library-quest-ff-edition.zip" class="btn-gold" style="text-decoration:none;">
+              📦 Télécharger (.ZIP)
+            </a>
+            <button id="gm-save-all-btn" class="btn-gold" type="button">💾 Sauvegarder</button>
+            <button id="gm-export-json-btn" class="btn-glass" type="button">📤 Exporter JSON</button>
+            <label class="btn-glass" style="cursor:pointer;">
+              📂 Importer JSON
+              <input id="gm-import-json-input" type="file" accept=".json,application/json" style="display:none;" />
+            </label>
+            <button id="gm-unlock-all-btn" class="btn-glass" type="button">✨ Tout débloquer (24/24)</button>
+            <button id="gm-reset-progress-btn" class="btn-danger" type="button">🔄 Réinitialiser à 0/24</button>
+          </div>
+
+          <!-- Paramètres du Couple & Lettre du 24 Décembre -->
+          <div class="gm-finale-card">
+            <div class="gm-card-kicker">💌 GRAND FINAL DU 24 DÉCEMBRE &amp; PARAMÈTRES DU COUPLE</div>
+            <div class="gm-two-col">
+              <div class="gm-field">
+                <label class="gm-label" for="gm-couple-password">Mot de passe secret bonus (Jour 24)</label>
+                <input id="gm-couple-password" class="gm-input" type="text" placeholder="Ex: KINGSLEY, MONS..." />
+              </div>
+              <div class="gm-field">
+                <label class="gm-label" for="gm-aldryn-house-select">Maison Lunaire d'Aldryn</label>
+                <select id="gm-aldryn-house-select" class="gm-select">
+                  <option value="Maison de la Nouvelle Lune|🌑|Totem : Phalène des Abysses • Murmure des Noyés">🌑 Maison de la Nouvelle Lune</option>
+                  <option value="Maison de la Lune Croissante|🌒|Totem : Cerf d'Écume • Flux de la Marée">🌒 Maison de la Lune Croissante</option>
+                  <option value="Maison de la Pleine Lune|🌕|Totem : Phénix d'Argent • Éclat Sélène">🌕 Maison de la Pleine Lune</option>
+                  <option value="Maison de la Lune Décroissante|🌘|Totem : Corbeau d'Obsidienne • Reflux Astral">🌘 Maison de la Lune Décroissante</option>
+                </select>
+              </div>
+            </div>
+            <div class="gm-field" style="margin-top:0.75rem;">
+              <label class="gm-label" for="gm-finale-love-letter">Grande Lettre d'Amour du 24 Décembre</label>
+              <textarea id="gm-finale-love-letter" class="gm-textarea" rows="5"></textarea>
+            </div>
+          </div>
+
+          <div id="gm-days-editor-grid" class="gm-days-grid"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       6. NOTIFICATION TOAST FLOTTANTE (LIQUID GLASS)
+       ======================================================================== -->
+  <div id="royal-toast" class="royal-toast glass-surface" role="status" aria-live="polite">
+    <span id="royal-toast-icon" class="toast-icon">✦</span>
+    <span id="royal-toast-text" class="toast-text">Notification</span>
+  </div>
+
+  <!-- Scripts : Données -> Audio/Particules -> Mini-Jeux -> Carte du Monde -> Contrôleur Principal -->
+  <script src="data/days_data.js"></script>
+  <script src="js/audio_fx.js"></script>
+  <script src="js/minigames_engine.js"></script>
+  <script src="js/world_map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

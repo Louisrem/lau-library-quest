@@ -1,0 +1,2339 @@
+/* ==========================================================================
+   L'ASSISTANTE DU VILAIN & LE MULTIVERS DE @LAU.LIBRARYYY
+   Design System 2026 : Zero-UI / Liquid Glass / JRPG Moderne
+   Inspirations : Unicorn Overlord • Final Fantasy XIV • Zelda TOTK
+   ========================================================================== */
+
+:root {
+  /* Surfaces Liquid Glass (Saphir Nocturne & Cristal) */
+  --bg-void: #050a18;
+  --bg-sapphire: #0a122a;
+  --glass-bg: rgba(10, 18, 42, 0.78);
+  --glass-bg-strong: rgba(8, 15, 36, 0.88);
+  --glass-bg-soft: rgba(16, 28, 60, 0.62);
+  --glass-hover: rgba(24, 40, 82, 0.84);
+
+  /* Bordures Fines 1px Or & Platine */
+  --border-gold: rgba(246, 211, 101, 0.35);
+  --border-gold-strong: rgba(246, 211, 101, 0.72);
+  --border-platinum: rgba(226, 232, 240, 0.16);
+  --border-crimson: rgba(244, 63, 94, 0.55);
+  --border-emerald: rgba(52, 211, 153, 0.5);
+
+  /* Palette Or, Éther, Cramoisi & Ivoire */
+  --gold-light: #fef3c7;
+  --gold-main: #f6d365;
+  --gold-deep: #d4af37;
+  --gold-bronze: #b88a2e;
+  --ether-cyan: #7dd3fc;
+  --ether-blue: #38bdf8;
+  --crimson-bright: #fb7185;
+  --crimson-main: #e11d48;
+  --crimson-deep: #881337;
+  --emerald-bright: #34d399;
+  --emerald-main: #10b981;
+
+  /* Textes */
+  --text-primary: #f8fafc;
+  --text-ivory: #f5efe0;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  /* Typographies */
+  --font-title: 'Cinzel', Georgia, serif;
+  --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-story: 'Cormorant Garamond', Georgia, serif;
+
+  /* Courbes & Ombres */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-glass: 0 14px 36px rgba(2, 6, 20, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-modal: 0 28px 72px rgba(1, 4, 16, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-gold: 0 0 24px rgba(246, 211, 101, 0.28);
+
+  --radius-pill: 999px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+/* Reset & Base Plein Écran */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* Scrollbar fine & discrète dans les modales */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(5, 10, 24, 0.35);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(246, 211, 101, 0.3);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(246, 211, 101, 0.55);
+}
+
+/* Surface Liquid Glass Réutilisable */
+.glass-surface {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid var(--border-gold);
+  box-shadow: var(--shadow-glass);
+}
+
+.glass-modal {
+  background: linear-gradient(160deg, rgba(11, 20, 46, 0.92), rgba(7, 13, 32, 0.95));
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  border: 1px solid var(--border-gold);
+  box-shadow: var(--shadow-modal);
+}
+
+/* Canvas de particules ambiantes */
+#ambient-particles-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.65;
+}
+
+/* ==========================================================================
+   1. CARTE DU MONDE 100% PLEIN ÉCRAN (100vw × 100vh)
+   ========================================================================== */
+.overworld-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 2;
+  background: radial-gradient(circle at 50% 45%, #101e44 0%, #070d20 65%, #040712 100%);
+  transition: filter 0.9s var(--ease-spring), transform 1.1s var(--ease-spring);
+}
+
+body.title-active .overworld-viewport {
+  filter: blur(5px) brightness(0.76) saturate(1.18);
+  transform: scale(1.03);
+}
+
+.world-map-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   2. ÉCRAN TITRE CINÉMATIQUE (OVERLAY D'ENTRÉE JRPG)
+   ========================================================================== */
+.title-screen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse at 50% 44%, rgba(16, 30, 72, 0.42) 0%, rgba(5, 10, 24, 0.82) 76%);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.75s var(--ease-spring), visibility 0.75s var(--ease-spring), transform 0.85s var(--ease-spring);
+}
+
+.title-screen-overlay.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(1.04);
+}
+
+.title-screen-aurora {
+  position: absolute;
+  width: min(680px, 92vw);
+  height: min(460px, 65vh);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 211, 101, 0.16) 0%, rgba(56, 189, 248, 0.09) 45%, transparent 72%);
+  filter: blur(36px);
+  pointer-events: none;
+  animation: auroraPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes auroraPulse {
+  0% { transform: scale(0.95); opacity: 0.75; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
+.title-screen-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 620px;
+  padding: 2.25rem 2rem;
+  border-radius: 28px;
+  background: rgba(8, 15, 36, 0.56);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid rgba(246, 211, 101, 0.28);
+  box-shadow: 0 30px 80px rgba(2, 5, 18, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: titleCardEntrance 0.9s var(--ease-spring) both;
+}
+
+@keyframes titleCardEntrance {
+  from { opacity: 0; transform: translateY(22px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.title-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-main);
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: rgba(246, 211, 101, 0.09);
+  border: 1px solid rgba(246, 211, 101, 0.25);
+  margin-bottom: 1.5rem;
+}
+
+.title-star {
+  color: var(--gold-light);
+  font-size: 0.8rem;
+}
+
+/* Trio de Chibis flottants */
+.title-chibi-trio {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.15rem;
+  margin-bottom: 1.5rem;
+}
+
+.chibi-medallion {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  animation: chibiFloat 3.4s ease-in-out infinite;
+}
+
+.chibi-medallion img {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 5px;
+  background: radial-gradient(circle at 30% 25%, rgba(255, 245, 214, 0.18), rgba(10, 18, 42, 0.72));
+  border: 1px solid rgba(246, 211, 101, 0.45);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45), 0 0 18px rgba(246, 211, 101, 0.18);
+  transition: transform 0.35s var(--ease-spring), border-color 0.3s ease;
+}
+
+.chibi-medallion:hover img {
+  transform: scale(1.08) translateY(-4px);
+  border-color: var(--gold-main);
+}
+
+.chibi-kingsley {
+  animation-delay: -1.1s;
+  transform: translateY(-6px);
+}
+
+.chibi-kingsley img {
+  width: 92px;
+  height: 92px;
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 22px rgba(52, 211, 153, 0.22);
+}
+
+.chibi-villain {
+  animation-delay: -2.2s;
+}
+
+.chibi-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-ivory);
+  background: rgba(10, 18, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.18rem 0.65rem;
+  border-radius: var(--radius-pill);
+}
+
+@keyframes chibiFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.title-main-heading {
+  font-family: var(--font-title);
+  font-size: clamp(1.85rem, 4.4vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.55rem;
+  background: linear-gradient(180deg, #fffdf5 0%, #f6d365 55%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 18px rgba(246, 211, 101, 0.26));
+}
+
+.title-subtitle {
+  font-family: var(--font-story);
+  font-size: clamp(1.08rem, 2vw, 1.32rem);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--text-ivory);
+  opacity: 0.92;
+  margin: 0 0 1.85rem;
+}
+
+.btn-start-adventure {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.95rem 2.3rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-title);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #120d04;
+  background: linear-gradient(135deg, #fef3c7 0%, #f6d365 48%, #d4af37 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.38), 0 0 0 1px rgba(246, 211, 101, 0.25);
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-spring), filter 0.3s ease;
+}
+
+.btn-start-adventure:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(246, 211, 101, 0.52), 0 0 28px rgba(254, 243, 199, 0.38);
+  filter: brightness(1.06);
+}
+
+.btn-start-adventure:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-start-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 25%, rgba(255, 255, 255, 0.55) 50%, transparent 75%);
+  transform: translateX(-120%);
+  animation: btnSheen 3.8s ease-in-out infinite;
+}
+
+@keyframes btnSheen {
+  0%, 55% { transform: translateX(-120%); }
+  100% { transform: translateX(130%); }
+}
+
+.btn-start-icon {
+  font-size: 0.85rem;
+}
+
+.title-hint {
+  margin: 1.25rem 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   3. HUD FLOTTANT MINIMALISTE (ZERO-UI LIQUID GLASS)
+   ========================================================================== */
+.game-hud {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.65s var(--ease-spring), transform 0.65s var(--ease-spring);
+}
+
+body.title-active .game-hud {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.game-hud button,
+.game-hud .glass-surface {
+  pointer-events: auto;
+}
+
+/* --- COIN HAUT-GAUCHE : PILULE PROFIL COMPACTE --- */
+.hud-top-left {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.hud-profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 5px 14px 5px 5px;
+  border-radius: var(--radius-pill);
+}
+
+.hud-avatar-ring {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+  box-shadow: 0 0 14px rgba(246, 211, 101, 0.32);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.hud-avatar-ring:hover {
+  transform: scale(1.07);
+}
+
+.hud-avatar-ring img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  background: #101b3d;
+}
+
+.hud-profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 126px;
+}
+
+.hud-counters-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.hud-stat-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold-light);
+}
+
+.hud-stat-secrets .hud-stat-val {
+  color: var(--ether-cyan);
+}
+
+.hud-stat-sep {
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.hud-micro-progress {
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.hud-micro-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-main), var(--gold-light));
+  box-shadow: 0 0 10px rgba(246, 211, 101, 0.65);
+  transition: width 0.6s var(--ease-spring);
+}
+
+/* Badge discret Maison d'Aldryn (débloqué au Jour 4) */
+.hud-aldryn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  border-color: rgba(125, 211, 252, 0.35);
+  transition: transform 0.25s var(--ease-spring), border-color 0.25s ease;
+}
+
+.hud-aldryn-pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--ether-cyan);
+}
+
+/* --- COIN HAUT-DROIT : DOCK D'ICÔNES COMPACT --- */
+.hud-top-right {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+}
+
+.hud-icon-dock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: var(--radius-pill);
+}
+
+.hud-icon-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  transition: background 0.22s ease, transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+}
+
+.hud-icon-btn:hover {
+  background: rgba(246, 211, 101, 0.16);
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgba(246, 211, 101, 0.38);
+}
+
+.hud-icon-btn:active {
+  transform: scale(0.93);
+}
+
+.hud-icon-btn.is-strict-mode {
+  background: rgba(244, 63, 94, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(244, 63, 94, 0.45);
+}
+
+.hud-mini-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--gold-main), var(--gold-deep));
+  color: #120d04;
+  font-size: 0.62rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.hud-badge-cyan {
+  background: linear-gradient(135deg, #bae6fd, #38bdf8);
+  color: #06182c;
+}
+
+.hud-dock-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 3px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Tooltips Élégants au Survol (Haut-Droit) */
+.hud-icon-btn[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 50%;
+  transform: translateX(50%) translateY(-4px);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(8, 15, 36, 0.94);
+  border: 1px solid rgba(246, 211, 101, 0.35);
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s var(--ease-spring);
+  z-index: 50;
+}
+
+.hud-icon-btn[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(50%) translateY(0);
+}
+
+/* Dernier bouton du dock : aligner le tooltip à droite pour ne pas déborder */
+.hud-icon-btn:last-child[data-tooltip]::after {
+  right: 0;
+  transform: translateX(0) translateY(-4px);
+}
+.hud-icon-btn:last-child[data-tooltip]:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+/* --- CÔTÉ DROIT : MINI-CONTRÔLES CAMÉRA & RÉGIONS --- */
+.hud-camera-rail {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 5px;
+  border-radius: var(--radius-pill);
+}
+
+.cam-ctrl-btn,
+.cam-region-btn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s var(--ease-spring);
+}
+
+.cam-region-btn {
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.cam-ctrl-btn:hover,
+.cam-region-btn:hover {
+  background: rgba(246, 211, 101, 0.18);
+  color: var(--gold-light);
+  transform: scale(1.08);
+}
+
+.cam-region-btn.active {
+  background: linear-gradient(135deg, rgba(246, 211, 101, 0.28), rgba(212, 175, 55, 0.16));
+  color: var(--gold-light);
+  box-shadow: inset 0 0 0 1px rgba(246, 211, 101, 0.6);
+}
+
+.cam-rail-divider {
+  width: 18px;
+  height: 1px;
+  margin: 3px 0;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Tooltips à gauche pour le rail caméra */
+.cam-ctrl-btn[data-tooltip]::after,
+.cam-region-btn[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+  white-space: nowrap;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(8, 15, 36, 0.94);
+  border: 1px solid rgba(246, 211, 101, 0.32);
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s var(--ease-spring);
+}
+
+.cam-ctrl-btn[data-tooltip]:hover::after,
+.cam-region-btn[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* --- BAS-CENTRE : BARRE DE NIVEAU SÉLECTIONNÉ (SUPER MARIO WONDER / UNICORN OVERLORD) --- */
+.hud-bottom-center {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(690px, calc(100vw - 24px));
+  display: flex;
+  justify-content: center;
+}
+
+.stage-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 22px;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.stage-bar.is-boss {
+  border-color: rgba(244, 63, 94, 0.62);
+  box-shadow: 0 16px 40px rgba(2, 6, 20, 0.6), 0 0 26px rgba(244, 63, 94, 0.2);
+}
+
+.stage-bar.is-legendary {
+  border-color: rgba(254, 243, 199, 0.78);
+  box-shadow: 0 16px 44px rgba(2, 6, 20, 0.62), 0 0 32px rgba(246, 211, 101, 0.34);
+}
+
+.stage-nav-arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  line-height: 1;
+  color: var(--text-ivory);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease, transform 0.2s var(--ease-spring), border-color 0.2s ease;
+}
+
+.stage-nav-arrow:hover:not(:disabled) {
+  background: rgba(246, 211, 101, 0.16);
+  border-color: rgba(246, 211, 101, 0.45);
+  color: var(--gold-light);
+  transform: scale(1.06);
+}
+
+.stage-nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stage-bar-center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stage-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stage-day-pill {
+  font-family: var(--font-title);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(246, 211, 101, 0.16);
+  color: var(--gold-light);
+  border: 1px solid rgba(246, 211, 101, 0.36);
+}
+
+.stage-bar.is-boss .stage-day-pill {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fecdd3;
+  border-color: rgba(244, 63, 94, 0.52);
+}
+
+.stage-bar.is-legendary .stage-day-pill {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.28), rgba(212, 175, 55, 0.22));
+  color: #fffbeb;
+  border-color: rgba(254, 243, 199, 0.65);
+}
+
+.stage-book-pill {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.stage-status-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.stage-status-pill.status-done {
+  background: rgba(16, 185, 129, 0.18);
+  color: var(--emerald-bright);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.stage-status-pill.status-new {
+  background: rgba(56, 189, 248, 0.16);
+  color: var(--ether-cyan);
+  border: 1px solid rgba(125, 211, 252, 0.35);
+}
+
+.stage-status-pill.status-locked {
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.stage-bar-title {
+  font-family: var(--font-title);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stage-play-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.68rem 1.3rem;
+  border-radius: 14px;
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  color: #140e04;
+  background: linear-gradient(135deg, #fef3c7 0%, #f6d365 50%, #d4af37 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.stage-play-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 26px rgba(246, 211, 101, 0.48);
+  filter: brightness(1.06);
+}
+
+.stage-play-btn:active {
+  transform: scale(0.97);
+}
+
+.stage-play-btn.is-replay {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.24), rgba(6, 78, 59, 0.5));
+  color: #d1fae5;
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.22);
+}
+
+.stage-play-btn.is-locked {
+  background: rgba(148, 163, 184, 0.16);
+  color: var(--text-muted);
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   4. STYLES CARTE DU MONDE (COMPATIBLES 100% AVEC WORLD_MAP.JS)
+   ========================================================================== */
+.wm-viewport,
+.wm-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.wm-viewport:active,
+.wm-stage:active,
+.wm-viewport.is-dragging,
+.wm-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.wm-world,
+.wm-canvas,
+.wm-world-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.wm-region-label {
+  position: absolute;
+  pointer-events: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 15, 36, 0.68);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(246, 211, 101, 0.34);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-title);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  z-index: 6;
+}
+
+/* Nœuds de Niveau (24 Jours sur la carte) */
+.wm-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: radial-gradient(circle at 30% 25%, rgba(30, 48, 96, 0.94), rgba(10, 18, 42, 0.95));
+  border: 2px solid rgba(246, 211, 101, 0.58);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(246, 211, 101, 0.22);
+  color: var(--gold-light);
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  z-index: 12;
+  transition: transform 0.28s var(--ease-spring), box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+}
+
+.wm-node:hover {
+  transform: translate(-50%, -50%) scale(1.14);
+  border-color: var(--gold-light);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6), 0 0 24px rgba(246, 211, 101, 0.48);
+  z-index: 18;
+}
+
+.wm-node.is-selected,
+.wm-node.is-active,
+.wm-node.selected {
+  transform: translate(-50%, -50%) scale(1.18);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(246, 211, 101, 0.34), 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 26px rgba(246, 211, 101, 0.65);
+  z-index: 20;
+}
+
+.wm-node.is-completed,
+.wm-node.completed {
+  background: radial-gradient(circle at 30% 25%, #10b981, #065f46);
+  border-color: #a7f3d0;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 18px rgba(52, 211, 153, 0.42);
+}
+
+.wm-node.is-locked,
+.wm-node.locked {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(148, 163, 184, 0.35);
+  color: var(--text-muted);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  opacity: 0.78;
+}
+
+/* Nœuds Boss (Jours 6, 12, 18, 21) */
+.wm-boss-node {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 30% 25%, #be123c, #4c0519);
+  border: 2px solid #fda4af;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.62), 0 0 24px rgba(244, 63, 94, 0.52);
+  color: #fff1f2;
+  animation: bossNodePulse 2.6s ease-in-out infinite;
+}
+
+.wm-boss-node:hover {
+  border-color: var(--gold-main);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 32px rgba(244, 63, 94, 0.72);
+}
+
+@keyframes bossNodePulse {
+  0%, 100% { box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 18px rgba(244, 63, 94, 0.42); }
+  50% { box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 32px rgba(244, 63, 94, 0.78); }
+}
+
+/* Nœud Légendaire (Jour 24 : Sanctuaire Final) */
+.wm-legendary-node {
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle at 35% 30%, #fef3c7 0%, #f6d365 45%, #b45309 100%);
+  border: 2.5px solid #ffffff;
+  color: #1c1002;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 36px rgba(246, 211, 101, 0.78);
+  animation: legendaryPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 26px rgba(246, 211, 101, 0.62); }
+  50% { box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65), 0 0 46px rgba(254, 243, 199, 0.95); }
+}
+
+/* Sprites Chibi Laura & Sire Kingsley sur la carte */
+.wm-hero-sprite,
+.wm-kingsley-sprite {
+  position: absolute;
+  transform: translate(-50%, -82%);
+  pointer-events: none;
+  z-index: 26;
+  transition: left 0.55s var(--ease-spring), top 0.55s var(--ease-spring);
+  filter: drop-shadow(0 8px 10px rgba(2, 6, 20, 0.72));
+}
+
+.wm-hero-sprite {
+  width: 68px;
+  height: 68px;
+}
+
+.wm-hero-sprite img,
+.wm-kingsley-sprite img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  animation: heroIdleBob 2.2s ease-in-out infinite;
+}
+
+.wm-hero-sprite.is-walking img,
+.wm-hero-sprite.walking img {
+  animation: heroWalkBounce 0.34s ease-in-out infinite;
+}
+
+.wm-kingsley-sprite {
+  width: 44px;
+  height: 44px;
+  z-index: 25;
+  transition: left 0.72s var(--ease-spring), top 0.72s var(--ease-spring);
+}
+
+.wm-kingsley-sprite img {
+  animation: kingsleyHop 1.8s ease-in-out infinite;
+}
+
+@keyframes heroIdleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes heroWalkBounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-9px) rotate(3deg); }
+}
+
+@keyframes kingsleyHop {
+  0%, 70%, 100% { transform: translateY(0) scale(1); }
+  85% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* Easter Eggs Interactifs sur la Carte (12 Secrets) */
+.wm-easter-egg {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.12rem;
+  background: rgba(10, 20, 48, 0.76);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.55);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(56, 189, 248, 0.36);
+  cursor: pointer;
+  z-index: 15;
+  animation: eggSparkle 2.8s ease-in-out infinite;
+  transition: transform 0.25s var(--ease-spring), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wm-easter-egg:hover {
+  transform: translate(-50%, -50%) scale(1.22);
+  border-color: var(--gold-light);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 24px rgba(246, 211, 101, 0.65);
+  z-index: 22;
+}
+
+.wm-easter-egg.is-found,
+.wm-easter-egg.found,
+.wm-easter-egg.discovered {
+  border-color: rgba(246, 211, 101, 0.72);
+  background: rgba(246, 211, 101, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.42), 0 0 14px rgba(246, 211, 101, 0.35);
+  animation: none;
+}
+
+@keyframes eggSparkle {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 14px rgba(0,0,0,0.45), 0 0 12px rgba(56, 189, 248, 0.3); }
+  50% { transform: translate(-50%, -56%) scale(1.07); box-shadow: 0 8px 20px rgba(0,0,0,0.45), 0 0 24px rgba(125, 211, 252, 0.68); }
+}
+
+/* Bulle de Dialogue Flottante sur la Carte */
+.wm-speech-bubble {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  max-width: 280px;
+  min-width: 160px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(8, 15, 36, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(246, 211, 101, 0.45);
+  box-shadow: 0 14px 32px rgba(2, 6, 20, 0.65);
+  color: var(--text-ivory);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  text-align: center;
+  z-index: 35;
+  pointer-events: auto;
+  animation: bubblePopIn 0.32s var(--ease-spring) both;
+}
+
+.wm-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(8, 15, 36, 0.94);
+  border-right: 1px solid rgba(246, 211, 101, 0.45);
+  border-bottom: 1px solid rgba(246, 211, 101, 0.45);
+}
+
+@keyframes bubblePopIn {
+  from { opacity: 0; transform: translate(-50%, -88%) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+/* ==========================================================================
+   5. BOUTONS DESIGN SYSTEM LIQUID GLASS
+   ========================================================================== */
+.btn-glass,
+.btn-gold,
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  padding: 0.6rem 1.12rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.22s var(--ease-spring), background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-primary);
+}
+
+.btn-glass:hover:not(:disabled) {
+  background: rgba(246, 211, 101, 0.14);
+  border-color: rgba(246, 211, 101, 0.45);
+  color: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.btn-glass:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.btn-subtle {
+  color: var(--text-secondary);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #fef3c7 0%, #f6d365 50%, #d4af37 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #140e04;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.28);
+}
+
+.btn-gold:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(246, 211, 101, 0.44);
+  filter: brightness(1.05);
+}
+
+.btn-danger {
+  background: rgba(225, 29, 72, 0.18);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  color: #fecdd3;
+}
+
+.btn-danger:hover {
+  background: rgba(225, 29, 72, 0.32);
+  border-color: rgba(244, 63, 94, 0.78);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   6. MODALES (CHAPITRE + TIROIR UNIFIÉ)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(3, 7, 18, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.32s var(--ease-spring), visibility 0.32s var(--ease-spring);
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-shell {
+  position: relative;
+  width: 100%;
+  max-height: min(90vh, 860px);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.38s var(--ease-spring);
+}
+
+.modal-backdrop.open .modal-shell {
+  transform: translateY(0) scale(1);
+}
+
+.chapter-modal-shell {
+  max-width: 920px;
+}
+
+.drawer-modal-shell {
+  max-width: 1040px;
+}
+
+.chapter-modal-shell.is-boss-modal {
+  border-color: rgba(244, 63, 94, 0.55);
+  box-shadow: 0 28px 72px rgba(2, 4, 16, 0.85), 0 0 40px rgba(244, 63, 94, 0.22);
+}
+
+.chapter-modal-shell.boss-shake,
+.chest-seal-arena.boss-shake {
+  animation: modalShake 0.42s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes modalShake {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+.modal-close-x {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: var(--text-ivory);
+  background: rgba(8, 15, 36, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.2s ease, transform 0.25s var(--ease-spring), border-color 0.2s ease;
+  z-index: 5;
+}
+
+.modal-close-x:hover {
+  background: rgba(244, 63, 94, 0.28);
+  border-color: rgba(244, 63, 94, 0.6);
+  transform: rotate(90deg);
+}
+
+/* --- EN-TÊTE MODALE CHAPITRE --- */
+.boss-alert-ribbon {
+  background: linear-gradient(90deg, #881337, #e11d48, #881337);
+  color: #fff1f2;
+  font-family: var(--font-title);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-align: center;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.chapter-header {
+  position: relative;
+  min-height: 122px;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chapter-header-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.42;
+  transform: scale(1.04);
+}
+
+.chapter-header-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 15, 36, 0.35) 0%, rgba(8, 15, 36, 0.94) 100%);
+}
+
+.chapter-header .modal-close-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.chapter-header-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 2.5rem;
+}
+
+.chapter-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-main);
+  margin-bottom: 0.25rem;
+}
+
+.chapter-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.18rem, 2.2vw, 1.58rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.chapter-books-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.45rem;
+}
+
+.book-chip {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-ivory);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+}
+
+.rarity-pill {
+  flex-shrink: 0;
+  font-family: var(--font-title);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.rarity-commun {
+  background: rgba(246, 211, 101, 0.14);
+  color: var(--gold-light);
+  border: 1px solid rgba(246, 211, 101, 0.35);
+}
+
+.rarity-epique {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fecdd3;
+  border: 1px solid rgba(244, 63, 94, 0.52);
+}
+
+.rarity-legendaire {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.28), rgba(212, 175, 55, 0.22));
+  color: #fffbeb;
+  border: 1px solid rgba(254, 243, 199, 0.68);
+}
+
+/* Barre d'étapes 1 / 2 / 3 */
+.stage-tabs-bar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(5, 10, 24, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.stage-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.22s var(--ease-spring);
+}
+
+.stage-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.stage-tab-btn.active {
+  color: var(--gold-light);
+  background: rgba(246, 211, 101, 0.14);
+  border-color: rgba(246, 211, 101, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.chapter-modal-body {
+  padding: 1.35rem 1.5rem 1.65rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* --- ÉTAPE 1 : VISUAL NOVEL MODERNE (FFXIV / UNICORN OVERLORD) --- */
+.vn-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.vn-portraits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.vn-char-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.46;
+  transform: scale(0.95);
+  transition: opacity 0.35s var(--ease-spring), transform 0.35s var(--ease-spring), filter 0.35s ease;
+  filter: saturate(0.7);
+}
+
+.vn-char-card.speaking {
+  opacity: 1;
+  transform: scale(1.03) translateY(-4px);
+  filter: saturate(1.1);
+}
+
+.vn-portrait-ring {
+  width: min(148px, 100%);
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, rgba(28, 45, 92, 0.72), rgba(7, 13, 30, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vn-char-card.speaking .vn-portrait-ring {
+  border-color: rgba(246, 211, 101, 0.72);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), 0 0 24px rgba(246, 211, 101, 0.25);
+}
+
+.vn-portrait-ring img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.vn-nameplate {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vn-char-card.speaking .vn-nameplate {
+  color: var(--gold-light);
+  background: rgba(246, 211, 101, 0.14);
+  border-color: rgba(246, 211, 101, 0.38);
+}
+
+.vn-dialogue-panel {
+  padding: 1.25rem 1.4rem;
+  border-radius: 18px;
+  background: rgba(7, 13, 32, 0.72);
+  border: 1px solid rgba(246, 211, 101, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.vn-speaker-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.vn-speaker-name {
+  font-family: var(--font-title);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold-main);
+}
+
+.vn-line-count {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.vn-dialogue-copy {
+  font-family: var(--font-story);
+  font-size: 1.32rem;
+  line-height: 1.62;
+  color: var(--text-ivory);
+  margin: 0 0 1.2rem;
+  min-height: 4.5rem;
+}
+
+.vn-transcript-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.vn-transcript-line {
+  font-family: var(--font-story);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.vn-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.vn-nav-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* --- ÉTAPE 2 : HARMONISATION ULTRA-PROPRE DES 22 MINI-JEUX --- */
+.game-stage .mg-wrapper {
+  background: rgba(8, 15, 36, 0.72) !important;
+  border: 1px solid rgba(246, 211, 101, 0.28) !important;
+  border-radius: 18px !important;
+  padding: 1.35rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  font-family: var(--font-ui) !important;
+  color: var(--text-primary) !important;
+}
+
+.game-stage .mg-lore {
+  font-family: var(--font-story) !important;
+  font-size: 1.18rem !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-left: 2px solid var(--gold-main) !important;
+  border-radius: 0 12px 12px 0 !important;
+  color: var(--text-ivory) !important;
+}
+
+.game-stage .mg-question-box {
+  background: rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px !important;
+}
+
+.game-stage .mg-runic-input {
+  background: rgba(5, 10, 24, 0.85) !important;
+  border: 1px solid rgba(246, 211, 101, 0.42) !important;
+  border-radius: 12px !important;
+  font-family: var(--font-ui) !important;
+}
+
+/* --- ÉTAPE 3 : SCEAU DE CIRE ROUGE & COFFRE IRL --- */
+.loot-ceremony-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.chest-seal-arena {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(246, 211, 101, 0.22);
+}
+
+.chest-svg-wrap {
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+}
+
+.wax-seal-button {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: radial-gradient(circle at 35% 30%, #e11d48 0%, #9f1239 58%, #4c0519 100%);
+  border: 3px solid rgba(254, 205, 211, 0.35);
+  box-shadow: 0 12px 30px rgba(159, 18, 57, 0.55), inset 0 2px 10px rgba(255, 255, 255, 0.25);
+  transition: transform 0.22s var(--ease-spring), box-shadow 0.22s ease;
+}
+
+.wax-seal-button:hover {
+  transform: scale(1.06);
+  box-shadow: 0 16px 36px rgba(225, 29, 72, 0.65), 0 0 24px rgba(246, 211, 101, 0.35);
+}
+
+.wax-seal-button:active {
+  transform: scale(0.94);
+}
+
+.wax-seal-emblem {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.wax-seal-motto {
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff1f2;
+}
+
+.wax-crack-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.wax-seal-button.cracked-1 .wax-crack-1 { opacity: 1; }
+.wax-seal-button.cracked-2 .wax-crack-1,
+.wax-seal-button.cracked-2 .wax-crack-2 { opacity: 1; }
+
+.wax-pips-row {
+  display: flex;
+  gap: 8px;
+}
+
+.wax-pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(246, 211, 101, 0.35);
+  transition: all 0.25s ease;
+}
+
+.wax-pip.broken {
+  background: var(--gold-main);
+  box-shadow: 0 0 12px rgba(246, 211, 101, 0.8);
+  transform: scale(1.2);
+}
+
+/* Carte de Butin Révélé */
+.loot-revealed-card {
+  width: 100%;
+  max-width: 680px;
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgba(16, 28, 62, 0.82), rgba(8, 15, 36, 0.92));
+  border: 1px solid rgba(246, 211, 101, 0.45);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+.loot-rune-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--emerald-bright);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.85rem;
+}
+
+.loot-title-display {
+  font-family: var(--font-title);
+  font-size: 1.45rem;
+  color: var(--gold-light);
+  margin: 0.65rem 0 0.4rem;
+}
+
+.loot-rp-desc {
+  font-family: var(--font-story);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 0 0 1.2rem;
+}
+
+.irl-callout {
+  text-align: left;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  background: rgba(246, 211, 101, 0.09);
+  border: 1px solid rgba(246, 211, 101, 0.38);
+  margin-bottom: 1.2rem;
+}
+
+.irl-callout-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold-main);
+  margin-bottom: 0.35rem;
+}
+
+.irl-callout-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Grand Final Jour 24 : Portrait Couple & Lettre d'Amour */
+.finale-showcase {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(246, 211, 101, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.finale-couple-frame {
+  width: min(440px, 100%);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(246, 211, 101, 0.55);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6), 0 0 28px rgba(246, 211, 101, 0.22);
+}
+
+.finale-couple-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.love-letter-box {
+  width: 100%;
+  text-align: left;
+  white-space: pre-wrap;
+  font-family: var(--font-story);
+  font-size: 1.22rem;
+  line-height: 1.72;
+  color: var(--text-ivory);
+  padding: 1.35rem 1.5rem;
+  border-radius: 16px;
+  background: rgba(255, 250, 235, 0.05);
+  border: 1px solid rgba(246, 211, 101, 0.3);
+}
+
+/* ==========================================================================
+   7. MODALE TIROIR UNIFIÉE (BUTIN / CODEX / SECRETS / ATELIER MJ)
+   ========================================================================== */
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px 16px;
+  background: rgba(5, 10, 24, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.drawer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.drawer-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  transition: all 0.22s var(--ease-spring);
+}
+
+.drawer-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.drawer-tab-btn.active {
+  color: var(--gold-light);
+  background: rgba(246, 211, 101, 0.15);
+  border-color: rgba(246, 211, 101, 0.42);
+}
+
+.drawer-body {
+  padding: 1.35rem 1.5rem 1.75rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.drawer-panel {
+  display: none;
+}
+
+.drawer-panel.active {
+  display: block;
+}
+
+.drawer-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.drawer-title {
+  font-family: var(--font-title);
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin: 0 0 0.25rem;
+}
+
+.drawer-desc {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 620px;
+}
+
+.pill-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pill-filter-btn {
+  padding: 0.42rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.2s ease;
+}
+
+.pill-filter-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(246, 211, 101, 0.35);
+}
+
+.pill-filter-btn.active {
+  background: rgba(246, 211, 101, 0.18);
+  color: var(--gold-light);
+  border-color: rgba(246, 211, 101, 0.52);
+}
+
+.secrets-counter-pill {
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ether-cyan);
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+}
+
+/* Grilles de Cartes Épurées (Butin, Codex, Secrets) */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.glass-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.05rem 1.15rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  transition: border-color 0.25s ease, transform 0.25s var(--ease-spring), background 0.25s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(246, 211, 101, 0.38);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.glass-card.is-claimed {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.glass-card.secret-found {
+  border-color: rgba(125, 211, 252, 0.45);
+  background: linear-gradient(155deg, rgba(56, 189, 248, 0.09), rgba(10, 18, 42, 0.5));
+}
+
+.glass-card.secret-locked {
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.25);
+  opacity: 0.82;
+}
+
+.card-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gold-main);
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.2rem 0;
+}
+
+.card-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.card-quote {
+  font-family: var(--font-story);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  color: var(--text-ivory);
+  margin: 0;
+}
+
+.card-irl-box {
+  padding: 0.72rem 0.88rem;
+  border-radius: 12px;
+  background: rgba(246, 211, 101, 0.08);
+  border: 1px solid rgba(246, 211, 101, 0.26);
+  font-size: 0.84rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* --- ATELIER DU VILAIN (MAÎTRE DU JEU) --- */
+.gm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+}
+
+.gm-finale-card {
+  padding: 1.15rem;
+  border-radius: 16px;
+  background: rgba(246, 211, 101, 0.06);
+  border: 1px solid rgba(246, 211, 101, 0.34);
+  margin-bottom: 1.25rem;
+}
+
+.gm-card-kicker {
+  font-family: var(--font-title);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gold-main);
+  margin-bottom: 0.8rem;
+}
+
+.gm-two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.gm-days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+.gm-day-item {
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.gm-day-item.is-boss {
+  border-color: rgba(244, 63, 94, 0.42);
+}
+
+.gm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gm-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.gm-input,
+.gm-select,
+.gm-textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(5, 10, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  outline: none;
+  user-select: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gm-input:focus,
+.gm-select:focus,
+.gm-textarea:focus {
+  border-color: var(--gold-main);
+  box-shadow: 0 0 0 3px rgba(246, 211, 101, 0.15);
+}
+
+.gm-textarea {
+  resize: vertical;
+  min-height: 68px;
+}
+
+/* ==========================================================================
+   8. NOTIFICATION TOAST FLOTTANTE
+   ========================================================================== */
+.royal-toast {
+  position: fixed;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-16px);
+  z-index: 110;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: min(520px, calc(100vw - 28px));
+  padding: 0.68rem 1.2rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-spring), transform 0.35s var(--ease-spring);
+}
+
+.royal-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-icon {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   9. RESPONSIVE MOBILE & TABLETTE
+   ========================================================================== */
+@media (max-width: 720px) {
+  .title-screen-content {
+    padding: 1.65rem 1.25rem;
+    border-radius: 22px;
+  }
+
+  .chibi-medallion img {
+    width: 66px;
+    height: 66px;
+  }
+
+  .chibi-kingsley img {
+    width: 74px;
+    height: 74px;
+  }
+
+  .hud-top-left {
+    top: 10px;
+    left: 10px;
+  }
+
+  .hud-top-right {
+    top: 10px;
+    right: 10px;
+  }
+
+  .hud-profile-pill {
+    padding: 4px 10px 4px 4px;
+    gap: 8px;
+  }
+
+  .hud-avatar-ring {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hud-profile-meta {
+    min-width: 98px;
+  }
+
+  .hud-icon-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
+  }
+
+  .hud-icon-btn[data-tooltip]::after,
+  .cam-ctrl-btn[data-tooltip]::after,
+  .cam-region-btn[data-tooltip]::after {
+    display: none;
+  }
+
+  .hud-camera-rail {
+    right: 10px;
+    padding: 5px 4px;
+  }
+
+  .cam-ctrl-btn,
+  .cam-region-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .hud-bottom-center {
+    bottom: 12px;
+    width: calc(100vw - 16px);
+  }
+
+  .stage-bar {
+    padding: 7px 8px;
+    gap: 8px;
+    border-radius: 18px;
+  }
+
+  .stage-nav-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+
+  .stage-book-pill {
+    display: none;
+  }
+
+  .stage-bar-title {
+    font-size: 0.88rem;
+  }
+
+  .stage-play-btn {
+    padding: 0.56rem 0.92rem;
+    font-size: 0.74rem;
+  }
+
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  .vn-portraits-grid {
+    gap: 0.55rem;
+  }
+
+  .vn-portrait-ring {
+    border-radius: 14px;
+  }
+
+  .vn-dialogue-copy {
+    font-size: 1.15rem;
+  }
+
+  .chapter-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
