@@ -2,7 +2,7 @@
  * ============================================================================
  * WORLD_MAP.JS — MOTEUR DE CARTE DU MONDE JRPG PLEIN ÉCRAN (OVERWORLD ENGINE)
  * ============================================================================
- * "L'Assistante du Vilain & Le Multivers de @lau.libraryyy"
+ *"L'Assistante du Vilain & Le Multivers de @lau.libraryyy"
  *
  * Inspiré de Super Mario World, Unicorn Overlord & Final Fantasy IX :
  * - Espace monde 2000 × 1125 (16:9) calé sur assets/world_overworld_map.png
@@ -20,7 +20,7 @@
  */
 
 (function () {
-  'use strict';
+'use strict';
 
   // ==========================================================================
   // 1. CONSTANTES DU MONDE & DONNÉES CARTOGRAPHIQUES
@@ -29,7 +29,7 @@
   const WORLD_H = 1125;
   const MIN_ZOOM = 0.55;
   const MAX_ZOOM = 2.0;
-  const SECRETS_STORAGE_KEY = 'lau_library_map_secrets_v1';
+  const SECRETS_STORAGE_KEY ='lau_library_map_secrets_v1';
 
   const BOSS_DAYS = new Set([6, 12, 18, 21]);
   const FINALE_DAY = 24;
@@ -37,75 +37,75 @@
   // Les 24 nœuds géographiques calés au pixel près sur les lieux peints de world_overworld_map.png (2000 × 1125)
   const LEVEL_NODES = [
     // Semaine 1 (Sud-Ouest : Manoir du Vilain & Baie d'Aldryn — Jours 1 à 6)
-    { day: 1, week: 1, x: 640, y: 745, place: 'Manoir du Vilain', role: 'start' },
-    { day: 2, week: 1, x: 475, y: 755, place: 'Allée des Reliés Vinted', role: 'normal' },
-    { day: 3, week: 1, x: 375, y: 725, place: 'Portail de Laiton', role: 'normal' },
-    { day: 4, week: 1, x: 296, y: 695, place: "Observatoire Lunaire d'Aldryn", role: 'normal' },
-    { day: 5, week: 1, x: 795, y: 785, place: 'Cryptex de la Côte', role: 'normal' },
-    { day: 6, week: 1, x: 1002, y: 775, place: "Pont de l'Académie de Caten", role: 'boss' },
+    { day: 1, week: 1, x: 640, y: 745, place:'Manoir du Vilain', role:'start'},
+    { day: 2, week: 1, x: 475, y: 755, place:'Allée des Reliés Vinted', role:'normal'},
+    { day: 3, week: 1, x: 375, y: 725, place:'Portail de Laiton', role:'normal'},
+    { day: 4, week: 1, x: 296, y: 695, place:"Observatoire Lunaire d'Aldryn", role:'normal'},
+    { day: 5, week: 1, x: 795, y: 785, place:'Cryptex de la Côte', role:'normal'},
+    { day: 6, week: 1, x: 1002, y: 775, place:"Pont de l'Académie de Caten", role:'boss'},
 
     // Semaine 2 (Sud-Est : Désert de Daevabad & Brumes d'Irlande — Jours 7 à 12)
-    { day: 7, week: 2, x: 1145, y: 785, place: 'Dunes de Laiton', role: 'normal' },
-    { day: 8, week: 2, x: 1270, y: 765, place: 'Cité Orientale de Daevabad', role: 'normal' },
-    { day: 9, week: 2, x: 1455, y: 780, place: "Oasis d'Everflame", role: 'normal' },
-    { day: 10, week: 2, x: 1630, y: 760, place: "Pierres Celtiques d'Irlande", role: 'normal' },
-    { day: 11, week: 2, x: 1755, y: 680, place: 'Forêt des Sortilèges', role: 'normal' },
-    { day: 12, week: 2, x: 1512, y: 578, place: 'Pont Est de Sinegard', role: 'boss' },
+    { day: 7, week: 2, x: 1145, y: 785, place:'Dunes de Laiton', role:'normal'},
+    { day: 8, week: 2, x: 1270, y: 765, place:'Cité Orientale de Daevabad', role:'normal'},
+    { day: 9, week: 2, x: 1455, y: 780, place:"Oasis d'Everflame", role:'normal'},
+    { day: 10, week: 2, x: 1630, y: 760, place:"Pierres Celtiques d'Irlande", role:'normal'},
+    { day: 11, week: 2, x: 1755, y: 680, place:'Forêt des Sortilèges', role:'normal'},
+    { day: 12, week: 2, x: 1512, y: 578, place:'Pont Est de Sinegard', role:'boss'},
 
     // Semaine 3 (Nord-Ouest : Terres de Feu, Palais d'Or & Mons — Jours 13 à 18)
-    { day: 13, week: 3, x: 1000, y: 585, place: 'Carrefour de la Boussole', role: 'normal' },
-    { day: 14, week: 3, x: 564, y: 585, place: 'Pont Ouest des Marées', role: 'normal' },
-    { day: 15, week: 3, x: 506, y: 440, place: 'Champ des Coquelicots', role: 'normal' },
-    { day: 16, week: 3, x: 344, y: 295, place: 'Volcan de Feu de Dragon', role: 'normal' },
-    { day: 17, week: 3, x: 622, y: 260, place: "Palais Doré d'Auren", role: 'normal' },
-    { day: 18, week: 3, x: 808, y: 435, place: 'Beffroi & Grenier de Mons', role: 'boss' },
+    { day: 13, week: 3, x: 1000, y: 585, place:'Carrefour de la Boussole', role:'normal'},
+    { day: 14, week: 3, x: 564, y: 585, place:'Pont Ouest des Marées', role:'normal'},
+    { day: 15, week: 3, x: 506, y: 440, place:'Champ des Coquelicots', role:'normal'},
+    { day: 16, week: 3, x: 344, y: 295, place:'Volcan de Feu de Dragon', role:'normal'},
+    { day: 17, week: 3, x: 622, y: 260, place:"Palais Doré d'Auren", role:'normal'},
+    { day: 18, week: 3, x: 808, y: 435, place:'Beffroi & Grenier de Mons', role:'boss'},
 
     // Semaine 4 (Nord-Est : Pics d'Alchimie & Sanctuaire de Noël — Jours 19 à 24)
-    { day: 19, week: 4, x: 1006, y: 398, place: 'Pont Nord des Brumes', role: 'normal' },
-    { day: 20, week: 4, x: 1234, y: 425, place: "Tour d'Alchimiste de Red City", role: 'normal' },
-    { day: 21, week: 4, x: 1390, y: 380, place: 'Col du Complot Royal', role: 'boss' },
-    { day: 22, week: 4, x: 1535, y: 350, place: "Sapins de l'Effet Boule de Neige", role: 'normal' },
-    { day: 23, week: 4, x: 1680, y: 325, place: 'Arche du Grand Conseil', role: 'normal' },
-    { day: 24, week: 4, x: 1578, y: 265, place: 'Sanctuaire du Cristal Mère de Noël', role: 'finale' }
+    { day: 19, week: 4, x: 1006, y: 398, place:'Pont Nord des Brumes', role:'normal'},
+    { day: 20, week: 4, x: 1234, y: 425, place:"Tour d'Alchimiste de Red City", role:'normal'},
+    { day: 21, week: 4, x: 1390, y: 380, place:'Col du Complot Royal', role:'boss'},
+    { day: 22, week: 4, x: 1535, y: 350, place:"Sapins de l'Effet Boule de Neige", role:'normal'},
+    { day: 23, week: 4, x: 1680, y: 325, place:'Arche du Grand Conseil', role:'normal'},
+    { day: 24, week: 4, x: 1578, y: 265, place:'Sanctuaire du Cristal Mère de Noël', role:'finale'}
   ];
 
   // Plaques cartographiques subtiles dans les 4 coins du continent
   const REGION_PLAQUES = [
     {
       week: 1,
-      roman: 'I',
-      title: "Manoir du Vilain & Baie d'Aldryn",
-      sub: 'Jours 1 – 6 • Sud-Ouest',
+      roman:'I',
+      title:"Manoir du Vilain & Baie d'Aldryn",
+      sub:'Jours 1 – 6 • Sud-Ouest',
       x: 42,
       y: 1036,
-      align: 'left'
+      align:'left'
     },
     {
       week: 2,
-      roman: 'II',
-      title: "Désert de Daevabad & Brumes d'Irlande",
-      sub: 'Jours 7 – 12 • Sud-Est',
+      roman:'II',
+      title:"Désert de Daevabad & Brumes d'Irlande",
+      sub:'Jours 7 – 12 • Sud-Est',
       x: 1958,
       y: 1036,
-      align: 'right'
+      align:'right'
     },
     {
       week: 3,
-      roman: 'III',
-      title: "Terres de Feu, Palais d'Or & Mons",
-      sub: 'Jours 13 – 18 • Nord-Ouest',
+      roman:'III',
+      title:"Terres de Feu, Palais d'Or & Mons",
+      sub:'Jours 13 – 18 • Nord-Ouest',
       x: 42,
       y: 42,
-      align: 'left'
+      align:'left'
     },
     {
       week: 4,
-      roman: 'IV',
-      title: "Pics d'Alchimie & Sanctuaire de Noël",
-      sub: 'Jours 19 – 24 • Nord-Est',
+      roman:'IV',
+      title:"Pics d'Alchimie & Sanctuaire de Noël",
+      sub:'Jours 19 – 24 • Nord-Est',
       x: 1958,
       y: 42,
-      align: 'right'
+      align:'right'
     }
   ];
 
@@ -122,14 +122,14 @@
 
   // Petits mots doux aléatoires du Vilain (ton copain)
   const VILLAIN_LOVE_NOTES = [
-    "« Chut... Ne le dis à personne, mais tu es de loin la meilleure Assistante (et la plus incroyable des copines) de tout le multivers. ❤️ »",
-    "« J'ai caché 24 petits bouts de nous sur cette carte. Prends ton temps, un café chaud à la main, et profite de chaque étape, ma Laure ! ☕✨ »",
-    "« Entre nous : même si tu critiques *Babel* encore 100 fois, je t'aimerai toujours plus que toutes les bibliothèques du monde réunies. 🏛️💛 »",
-    "« Kingsley m'a soufflé une pancarte secrète : « CÂLIN ILLIMITÉ VALABLE DÈS QUE TU FERMES L'ÉCRAN ! » 🐸💕 »",
-    "« De nos verres à Mons jusqu'aux sentiers d'Irlande, chaque aventure avec toi vaut mille fois tous les romans de fantasy. ☘️🌙 »",
-    "« Promis, au Sanctuaire du 24 décembre, il n'y a aucune arnaque Vinted — juste un trésor préparé rien que pour toi ! 🎄👑 »",
-    "« Psst, @lau.libraryyy ! Si tu cherches tous les secrets cachés sur la carte, j'ai glissé quelques clins d'œil bien sentis dans les quatre coins du continent... 😉🗺️ »",
-    "« Règle officielle du Manoir : zéro stress, 100% magie, plaid obligatoire et chocolat à volonté pour l'Assistante Principale ! 🍫✨ »"
+"« Chut... Ne le dis à personne, mais tu es de loin la meilleure Assistante (et la plus incroyable des copines) de tout le multivers.  »",
+"« J'ai caché 24 petits bouts de nous sur cette carte. Prends ton temps, un café chaud à la main, et profite de chaque étape, ma Laure !  »",
+"« Entre nous : même si tu critiques *Babel* encore 100 fois, je t'aimerai toujours plus que toutes les bibliothèques du monde réunies.  »",
+"« Kingsley m'a soufflé une pancarte secrète : « CÂLIN ILLIMITÉ VALABLE DÈS QUE TU FERMES L'ÉCRAN ! »  »",
+"« De nos verres à Mons jusqu'aux sentiers d'Irlande, chaque aventure avec toi vaut mille fois tous les romans de fantasy.  »",
+"« Promis, au Sanctuaire du 24 décembre, il n'y a aucune arnaque Vinted — juste un trésor préparé rien que pour toi !  »",
+"« Psst, @lau.libraryyy ! Si tu cherches tous les secrets cachés sur la carte, j'ai glissé quelques clins d'œil bien sentis dans les quatre coins du continent...  »",
+"« Règle officielle du Manoir : zéro stress, 100% magie, plaid obligatoire et chocolat à volonté pour l'Assistante Principale !  »"
   ];
 
   // ==========================================================================
@@ -137,113 +137,113 @@
   // ==========================================================================
   const MAP_EASTER_EGGS = [
     {
-      id: 'vinted_bones',
+      id:'vinted_bones',
       x: 705,
       y: 660,
-      icon: '📚',
+      icon:'?',
       biome: 1,
-      title: 'La Tour Vinted de The Bone Season',
-      text: "Tomes 2, 3 et 4 reliés achetés une fortune sur Vinted... réédités neufs 1 mois plus tard. Statut de lecture : toujours 0 page !"
+      title:'La Tour Vinted de The Bone Season',
+      text:"Tomes 2, 3 et 4 reliés achetés une fortune sur Vinted... réédités neufs 1 mois plus tard. Statut de lecture : toujours 0 page !"
     },
     {
-      id: 'mons_trolls',
+      id:'mons_trolls',
       x: 865,
       y: 350,
-      icon: '🍺',
+      icon:'?',
       biome: 3,
-      title: 'Le Beffroi de Mons & Trolls & Légendes',
-      text: "On avait juré qu'on venait juste acheter UN livre... on a fini à boire des verres et à refaire le monde avec les autrices !"
+      title:'Le Beffroi de Mons & Trolls & Légendes',
+      text:"On avait juré qu'on venait juste acheter UN livre... on a fini à boire des verres et à refaire le monde avec les autrices !"
     },
     {
-      id: 'fourth_wing_dragon',
+      id:'fourth_wing_dragon',
       x: 470,
       y: 235,
-      icon: '🐉',
+      icon:'?',
       biome: 3,
-      title: 'Le Dragon « Bof » de Fourth Wing',
-      text: "Zzz... Tout BookTok hurle au chef-d'œuvre, mais Laure lève les yeux au ciel et passe son chemin."
+      title:'Le Dragon « Bof » de Fourth Wing',
+      text:"Zzz... Tout BookTok hurle au chef-d'œuvre, mais Laure lève les yeux au ciel et passe son chemin."
     },
     {
-      id: 'babel_tower',
+      id:'babel_tower',
       x: 915,
       y: 525,
-      icon: '🏛️',
+      icon:'?',
       biome: 1,
-      title: "La Tour d'Argent d'Oxford (Babel)",
-      text: "Chuchotement de ton copain au loin : « Je te jure que Babel c'est un chef-d'œuvre absolu, donne-lui une seconde chance ! »"
+      title:"La Tour d'Argent d'Oxford (Babel)",
+      text:"Chuchotement de ton copain au loin : « Je te jure que Babel c'est un chef-d'œuvre absolu, donne-lui une seconde chance ! »"
     },
     {
-      id: 'amina_ship',
+      id:'amina_ship',
       x: 960,
       y: 1020,
-      icon: '⛵',
+      icon:'?',
       biome: 2,
       attachedToShip: true,
-      title: 'Le Navire Pirate Le Maram',
-      text: "Ohé matelot ! Capitaine Amina al-Sirafi a caché une cargaison d'épices et de coffres de S.A. Chakraborty à bord."
+      title:'Le Navire Pirate Le Maram',
+      text:"Ohé matelot ! Capitaine Amina al-Sirafi a caché une cargaison d'épices et de coffres de S.A. Chakraborty à bord."
     },
     {
-      id: 'ireland_clover',
+      id:'ireland_clover',
       x: 1755,
       y: 835,
-      icon: '☘️',
+      icon:'?',
       biome: 2,
-      title: "Le Bosquet d'Irlande (N'invite pas la forêt à entrer)",
-      text: "Souvenir de notre voyage en Irlande ! Les arbres murmurent encore... et on n'a toujours pas invité la forêt à entrer."
+      title:"Le Bosquet d'Irlande (N'invite pas la forêt à entrer)",
+      text:"Souvenir de notre voyage en Irlande ! Les arbres murmurent encore... et on n'a toujours pas invité la forêt à entrer."
     },
     {
-      id: 'hades_poppies',
+      id:'hades_poppies',
       x: 440,
       y: 390,
-      icon: '🌺',
+      icon:'?',
       biome: 3,
-      title: "Le Champ de Coquelicots d'Hades",
-      text: "Clin d'œil à notre super discussion à la Foire de Mons avec l'autrice de « Là où poussent les coquelicots » inspirée du jeu Hades !"
+      title:"Le Champ de Coquelicots d'Hades",
+      text:"Clin d'œil à notre super discussion à la Foire de Mons avec l'autrice de « Là où poussent les coquelicots » inspirée du jeu Hades !"
     },
     {
-      id: 'prison_healer_chest',
+      id:'prison_healer_chest',
       x: 1365,
       y: 865,
-      icon: '💎',
+      icon:'?',
       biome: 2,
-      title: 'Le Coffre Prison Healer (Édition Spéciale)',
-      text: "Règle officielle du multivers : seul le Tome 1 existe. Les tomes 2 et 3 ont été effacés de la réalité."
+      title:'Le Coffre Prison Healer (Édition Spéciale)',
+      text:"Règle officielle du multivers : seul le Tome 1 existe. Les tomes 2 et 3 ont été effacés de la réalité."
     },
     {
-      id: 'laulibraryyy_sign',
+      id:'laulibraryyy_sign',
       x: 1085,
       y: 635,
-      icon: '📸',
+      icon:'?',
       biome: 2,
-      title: 'Le Panneau Légendaire @lau.libraryyy',
-      text: "Attention, zone de critiques littéraires sans pitié et de piles à lire qui menacent de s'effondrer !"
+      title:'Le Panneau Légendaire @lau.libraryyy',
+      text:"Attention, zone de critiques littéraires sans pitié et de piles à lire qui menacent de s'effondrer !"
     },
     {
-      id: 'aldryn_lighthouse',
+      id:'aldryn_lighthouse',
       x: 225,
       y: 635,
-      icon: '🌙',
+      icon:'?',
       biome: 1,
-      title: "Le Phare des Marées d'Aldryn",
-      text: "En attendant le tome 2 de Curious Tides... la marée lunaire veille sur tes lectures nocturnes."
+      title:"Le Phare des Marées d'Aldryn",
+      text:"En attendant le tome 2 de Curious Tides... la marée lunaire veille sur tes lectures nocturnes."
     },
     {
-      id: 'poppy_campfire',
+      id:'poppy_campfire',
       x: 245,
       y: 295,
-      icon: '🔥',
+      icon:'?',
       biome: 3,
-      title: 'Le Feu de Camp de The Poppy War',
-      text: "Rin affûte sa lame en attendant que le Tome 3 arrive enfin dans ta bibliothèque !"
+      title:'Le Feu de Camp de The Poppy War',
+      text:"Rin affûte sa lame en attendant que le Tome 3 arrive enfin dans ta bibliothèque !"
     },
     {
-      id: 'kingsley_lilypad',
+      id:'kingsley_lilypad',
       x: 530,
       y: 883,
-      icon: '🐸',
+      icon:'?',
       biome: 1,
-      title: 'Le Nénuphar Secret de Kingsley',
-      text: "Croâ ! Pancarte secrète n°42 : « URGENCE CAFÉ, PLAID ET CHOCOLAT IMMÉDIAT ! »"
+      title:'Le Nénuphar Secret de Kingsley',
+      text:"Croâ ! Pancarte secrète n°42 : « URGENCE CAFÉ, PLAID ET CHOCOLAT IMMÉDIAT ! »"
     }
   ];
 
@@ -261,11 +261,11 @@
   }
 
   function escapeHtml(str) {
-    return String(str == null ? '' : str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return String(str == null ?'': str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
   }
 
   /**
@@ -280,7 +280,7 @@
     const nodeArcLengths = new Array(n).fill(0);
     let totalLength = 0;
 
-    let d = `M ${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
+    let d =`M ${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
 
     for (let i = 0; i < n - 1; i++) {
       const p0 = nodes[Math.max(0, i - 1)];
@@ -293,7 +293,7 @@
       const cp2x = p2.x - (p3.x - p1.x) * tension;
       const cp2y = p2.y - (p3.y - p1.y) * tension;
 
-      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+      d +=`C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
 
       // Échantillonnage fin du segment cubique (40 pas)
       const SAMPLES = 40;
@@ -338,11 +338,11 @@
     }
 
     /**
-     * Évalue la position (x, y) et la tangente à une distance d'arc globale `dist`.
+     * Évalue la position (x, y) et la tangente à une distance d'arc globale`dist`.
      */
     function sampleAtDistance(dist) {
       const clamped = clamp(dist, 0, totalLength);
-      // Recherche du segment contenant `clamped`
+      // Recherche du segment contenant`clamped`
       let seg = segments[segments.length - 1];
       for (let i = 0; i < segments.length; i++) {
         if (clamped <= segments[i].endDist || i === segments.length - 1) {
@@ -385,8 +385,8 @@
   function injectEngineStyles() {
     if (document.getElementById('world-map-engine-styles')) return;
     const style = document.createElement('style');
-    style.id = 'world-map-engine-styles';
-    style.textContent = `
+    style.id ='world-map-engine-styles';
+    style.textContent =`
 /* ==========================================================================
    WORLD MAP ENGINE — OVERWORLD JRPG PLEIN ÉCRAN
    ========================================================================== */
@@ -400,7 +400,7 @@
   -webkit-user-select: none;
   cursor: grab;
   background: radial-gradient(circle at 50% 45%, #efe4cf 0%, #e4d5b9 65%, #d6c3a3 100%);
-  font-family: var(--font-ui, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-family: var(--font-ui,'Plus Jakarta Sans', system-ui, sans-serif);
 }
 
 .ow-viewport.ow-dragging {
@@ -538,7 +538,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display, 'Cinzel Decorative', Georgia, serif);
+  font-family: var(--font-display,'Cinzel Decorative', Georgia, serif);
   font-size: 13px;
   font-weight: 700;
   color: #fef08a;
@@ -554,7 +554,7 @@
 }
 
 .ow-region-title {
-  font-family: var(--font-title, 'Cinzel', Georgia, serif);
+  font-family: var(--font-title,'Cinzel', Georgia, serif);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -700,7 +700,7 @@
 }
 
 .ow-secret-marker::before {
-  content: '';
+  content:'';
   position: absolute;
   inset: -6px;
   border-radius: 50%;
@@ -811,7 +811,7 @@
 }
 
 .ow-node-num {
-  font-family: var(--font-title, 'Cinzel', Georgia, serif);
+  font-family: var(--font-title,'Cinzel', Georgia, serif);
   font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -1009,7 +1009,7 @@
 .ow-node.is-finale .ow-node-label {
   border-color: rgba(254, 240, 138, 0.82);
   color: #fef08a;
-  font-family: var(--font-title, 'Cinzel', Georgia, serif);
+  font-family: var(--font-title,'Cinzel', Georgia, serif);
   font-weight: 700;
 }
 
@@ -1254,7 +1254,7 @@
 }
 
 .ow-dialog-bubble::after {
-  content: '';
+  content:'';
   position: absolute;
   left: var(--tail-left, 50%);
   bottom: -9px;
@@ -1316,7 +1316,7 @@
 }
 
 .ow-bubble-title {
-  font-family: var(--font-title, 'Cinzel', Georgia, serif);
+  font-family: var(--font-title,'Cinzel', Georgia, serif);
   font-size: 13.5px;
   font-weight: 700;
   color: #fef08a;
@@ -1346,7 +1346,7 @@
 }
 
 .ow-bubble-text {
-  font-family: var(--font-literary, 'Cormorant Garamond', Georgia, serif);
+  font-family: var(--font-literary,'Cormorant Garamond', Georgia, serif);
   font-size: 16px;
   font-style: italic;
   line-height: 1.42;
@@ -1380,14 +1380,14 @@
   const MapSFX = {
     playStep() {
       const fx = window.AudioFX;
-      if (!fx || (typeof fx.isMuted === 'function' && fx.isMuted())) return;
+      if (!fx || (typeof fx.isMuted ==='function'&& fx.isMuted())) return;
       try {
-        const ctx = typeof fx._ensureContext === 'function' ? fx._ensureContext() : null;
+        const ctx = typeof fx._ensureContext ==='function'? fx._ensureContext() : null;
         if (!ctx) return;
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'triangle';
+        osc.type ='triangle';
         const baseFreq = 240 + Math.random() * 85;
         osc.frequency.setValueAtTime(baseFreq, now);
         osc.frequency.exponentialRampToValueAtTime(110, now + 0.045);
@@ -1406,9 +1406,9 @@
     playFastTravel() {
       const fx = window.AudioFX;
       if (!fx) return;
-      if (typeof fx.playRuneChime === 'function') {
+      if (typeof fx.playRuneChime ==='function') {
         fx.playRuneChime();
-      } else if (typeof fx.playClick === 'function') {
+      } else if (typeof fx.playClick ==='function') {
         fx.playClick();
       }
     },
@@ -1416,23 +1416,23 @@
     playSecret(isNew) {
       const fx = window.AudioFX;
       if (!fx) return;
-      if (isNew && typeof fx.playRuneChime === 'function') {
+      if (isNew && typeof fx.playRuneChime ==='function') {
         fx.playRuneChime();
-      } else if (typeof fx.playClick === 'function') {
+      } else if (typeof fx.playClick ==='function') {
         fx.playClick();
       }
     },
 
     playClick() {
       const fx = window.AudioFX;
-      if (fx && typeof fx.playClick === 'function') {
+      if (fx && typeof fx.playClick ==='function') {
         fx.playClick();
       }
     },
 
     playLocked() {
       const fx = window.AudioFX;
-      if (fx && typeof fx.playError === 'function') {
+      if (fx && typeof fx.playError ==='function') {
         fx.playError();
       }
     }
@@ -1530,7 +1530,7 @@
       this.trailHistory = [];
 
       // État de marche / voyage rapide
-      this.travel = null; // { mode: 'walk' | 'fast', ... }
+      this.travel = null; // { mode:'walk'|'fast', ... }
 
       // État du navire pirate Le Maram
       this.ship = {
@@ -1573,7 +1573,7 @@
         this.destroy();
       }
 
-      const el = typeof viewportEl === 'string' ? document.querySelector(viewportEl) : viewportEl;
+      const el = typeof viewportEl ==='string'? document.querySelector(viewportEl) : viewportEl;
       if (!el) {
         console.warn('[WorldMapEngine] Conteneur introuvable:', viewportEl);
         return;
@@ -1592,14 +1592,14 @@
           ? window.ADVENT_DAYS_DATA
           : [];
       for (const d of daysList) {
-        if (d && typeof d.day === 'number') {
+        if (d && typeof d.day ==='number') {
           this.daysByNum.set(d.day, d);
         }
       }
 
       this.completedDays = new Set(this.options.completedDays || []);
       this.unlockedCheckFn =
-        typeof this.options.unlockedCheckFn === 'function'
+        typeof this.options.unlockedCheckFn ==='function'
           ? this.options.unlockedCheckFn
           : () => true;
       this.aldrynHouse = this.options.aldrynHouse || null;
@@ -1689,78 +1689,78 @@
     _buildDOM() {
       const vp = this.viewportEl;
       vp.classList.add('ow-viewport');
-      vp.innerHTML = '';
+      vp.innerHTML ='';
 
       // Stage 2000 × 1125
       const stage = document.createElement('div');
-      stage.className = 'ow-world-stage';
+      stage.className ='ow-world-stage';
       this.stageEl = stage;
 
       // 1. Fond illustré de la carte du monde
       const bgImg = document.createElement('img');
-      bgImg.className = 'ow-bg-map';
-      bgImg.src = 'assets/world_overworld_map.png';
-      bgImg.alt = 'Carte du Multivers de @lau.libraryyy';
+      bgImg.className ='ow-bg-map';
+      bgImg.src ='assets/world_overworld_map.png';
+      bgImg.alt ='Carte du Multivers de @lau.libraryyy';
       bgImg.draggable = false;
       bgImg.onerror = () => {
-        bgImg.style.display = 'none';
+        bgImg.style.display ='none';
       };
       stage.appendChild(bgImg);
 
       const vignette = document.createElement('div');
-      vignette.className = 'ow-map-vignette';
+      vignette.className ='ow-map-vignette';
       stage.appendChild(vignette);
 
       // 2. Chemin SVG Catmull-Rom double couche (piste pointillée + traînée Éther Or & Cyan)
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('class', 'ow-path-svg');
-      svg.setAttribute('viewBox', `0 0 ${WORLD_W} ${WORLD_H}`);
+      const svgNS ='http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS,'svg');
+      svg.setAttribute('class','ow-path-svg');
+      svg.setAttribute('viewBox',`0 0 ${WORLD_W} ${WORLD_H}`);
       svg.setAttribute('width', String(WORLD_W));
       svg.setAttribute('height', String(WORLD_H));
 
-      const defs = document.createElementNS(svgNS, 'defs');
-      defs.innerHTML = `
-        <linearGradient id="ow-ether-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#f6d365" />
-          <stop offset="48%" stop-color="#38bdf8" />
-          <stop offset="100%" stop-color="#fef08a" />
+      const defs = document.createElementNS(svgNS,'defs');
+      defs.innerHTML =`
+        <linearGradient id="ow-ether-grad"x1="0%"y1="100%"x2="100%"y2="0%">
+          <stop offset="0%"stop-color="#f6d365"/>
+          <stop offset="48%"stop-color="#38bdf8"/>
+          <stop offset="100%"stop-color="#fef08a"/>
         </linearGradient>
-        <filter id="ow-glow-ether" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="5" result="blur" />
+        <filter id="ow-glow-ether"x="-20%"y="-20%"width="140%"height="140%">
+          <feGaussianBlur stdDeviation="5"result="blur"/>
           <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-      `;
+`;
       svg.appendChild(defs);
 
-      const pathShadow = document.createElementNS(svgNS, 'path');
-      pathShadow.setAttribute('class', 'ow-path-shadow');
+      const pathShadow = document.createElementNS(svgNS,'path');
+      pathShadow.setAttribute('class','ow-path-shadow');
       pathShadow.setAttribute('d', this.spline.svgPathD);
       svg.appendChild(pathShadow);
 
-      const pathTrack = document.createElementNS(svgNS, 'path');
-      pathTrack.setAttribute('class', 'ow-path-track');
+      const pathTrack = document.createElementNS(svgNS,'path');
+      pathTrack.setAttribute('class','ow-path-track');
       pathTrack.setAttribute('d', this.spline.svgPathD);
       svg.appendChild(pathTrack);
 
-      const pathEtherGlow = document.createElementNS(svgNS, 'path');
-      pathEtherGlow.setAttribute('class', 'ow-path-ether-glow');
+      const pathEtherGlow = document.createElementNS(svgNS,'path');
+      pathEtherGlow.setAttribute('class','ow-path-ether-glow');
       pathEtherGlow.setAttribute('d', this.spline.svgPathD);
       svg.appendChild(pathEtherGlow);
       this.pathEtherGlowEl = pathEtherGlow;
 
-      const pathEtherCore = document.createElementNS(svgNS, 'path');
-      pathEtherCore.setAttribute('class', 'ow-path-ether-core');
+      const pathEtherCore = document.createElementNS(svgNS,'path');
+      pathEtherCore.setAttribute('class','ow-path-ether-core');
       pathEtherCore.setAttribute('d', this.spline.svgPathD);
       svg.appendChild(pathEtherCore);
       this.pathEtherCoreEl = pathEtherCore;
 
-      const fastArc = document.createElementNS(svgNS, 'path');
-      fastArc.setAttribute('class', 'ow-fast-travel-arc');
-      fastArc.setAttribute('d', '');
+      const fastArc = document.createElementNS(svgNS,'path');
+      fastArc.setAttribute('class','ow-fast-travel-arc');
+      fastArc.setAttribute('d','');
       svg.appendChild(fastArc);
       this.fastTravelArcEl = fastArc;
 
@@ -1768,48 +1768,48 @@
 
       // 3. Plaques de Régions Cartographiques dans les 4 coins
       const plaquesLayer = document.createElement('div');
-      plaquesLayer.className = 'ow-region-plaques';
+      plaquesLayer.className ='ow-region-plaques';
       for (const r of REGION_PLAQUES) {
         const plaque = document.createElement('div');
-        plaque.className = `ow-region-plaque${r.align === 'right' ? ' align-right' : ''}`;
-        plaque.style.left = `${r.x}px`;
-        plaque.style.top = `${r.y}px`;
-        plaque.innerHTML = `
+        plaque.className =`ow-region-plaque${r.align ==='right'?'align-right':''}`;
+        plaque.style.left =`${r.x}px`;
+        plaque.style.top =`${r.y}px`;
+        plaque.innerHTML =`
           <div class="ow-region-roman">${r.roman}</div>
           <div class="ow-region-text">
             <span class="ow-region-title">${escapeHtml(r.title)}</span>
             <span class="ow-region-sub">${escapeHtml(r.sub)}</span>
           </div>
-        `;
+`;
         plaquesLayer.appendChild(plaque);
       }
       stage.appendChild(plaquesLayer);
 
       // 4. Navire Pirate Le Maram (vogue en boucle + Easter Egg cliquable)
       const shipLayer = document.createElement('div');
-      shipLayer.className = 'ow-ship-layer';
+      shipLayer.className ='ow-ship-layer';
       const shipBtn = document.createElement('button');
-      shipBtn.type = 'button';
-      shipBtn.className = 'ow-ship-actor';
-      shipBtn.setAttribute('aria-label', 'Le Navire Pirate Le Maram — Secret caché');
-      shipBtn.innerHTML = `
-        <span class="ow-ship-wake" aria-hidden="true"></span>
+      shipBtn.type ='button';
+      shipBtn.className ='ow-ship-actor';
+      shipBtn.setAttribute('aria-label','Le Navire Pirate Le Maram — Secret caché');
+      shipBtn.innerHTML =`
+        <span class="ow-ship-wake"aria-hidden="true"></span>
         <span class="ow-ship-flip">
-          <img class="ow-ship-sprite" src="assets/sprite_ship.png" alt="Le Maram" draggable="false" />
+          <img class="ow-ship-sprite"src="assets/sprite_ship.png"alt="Le Maram"draggable="false"/>
         </span>
-        <span class="ow-ship-badge" aria-hidden="true">⛵</span>
-      `;
+        <span class="ow-ship-badge"aria-hidden="true"></span>
+`;
       const shipImg = shipBtn.querySelector('.ow-ship-sprite');
       shipImg.onerror = () => {
-        shipImg.style.display = 'none';
-        shipBtn.querySelector('.ow-ship-badge').style.fontSize = '24px';
-        shipBtn.querySelector('.ow-ship-badge').style.width = '46px';
-        shipBtn.querySelector('.ow-ship-badge').style.height = '46px';
+        shipImg.style.display ='none';
+        shipBtn.querySelector('.ow-ship-badge').style.fontSize ='24px';
+        shipBtn.querySelector('.ow-ship-badge').style.width ='46px';
+        shipBtn.querySelector('.ow-ship-badge').style.height ='46px';
       };
       shipBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (this.dragMoved) return;
-        const shipSecret = MAP_EASTER_EGGS.find((s) => s.id === 'amina_ship');
+        const shipSecret = MAP_EASTER_EGGS.find((s) => s.id ==='amina_ship');
         if (shipSecret) {
           this._triggerSecret(shipSecret, this.ship.x, this.ship.y - 26);
         }
@@ -1821,23 +1821,23 @@
 
       // 5. Les 11 Easter Eggs fixes sur la carte (amina_ship est sur le navire)
       const secretsLayer = document.createElement('div');
-      secretsLayer.className = 'ow-secrets-layer';
+      secretsLayer.className ='ow-secrets-layer';
       this.secretEls.clear();
       MAP_EASTER_EGGS.forEach((secret, idx) => {
         if (secret.attachedToShip) return;
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'ow-secret-marker';
-        btn.style.left = `${secret.x}px`;
-        btn.style.top = `${secret.y}px`;
-        btn.style.animationDelay = `${(idx * 0.27) % 2.5}s`;
+        btn.type ='button';
+        btn.className ='ow-secret-marker';
+        btn.style.left =`${secret.x}px`;
+        btn.style.top =`${secret.y}px`;
+        btn.style.animationDelay =`${(idx * 0.27) % 2.5}s`;
         btn.dataset.secretId = secret.id;
-        btn.setAttribute('aria-label', `Secret : ${secret.title}`);
+        btn.setAttribute('aria-label',`Secret : ${secret.title}`);
         btn.title = secret.title;
-        btn.innerHTML = `
-          <span class="ow-secret-icon" aria-hidden="true">${secret.icon}</span>
-          <span class="ow-secret-star" aria-hidden="true">★</span>
-        `;
+        btn.innerHTML =`
+          <span class="ow-secret-icon"aria-hidden="true">${secret.icon}</span>
+          <span class="ow-secret-star"aria-hidden="true"></span>
+`;
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (this.dragMoved) return;
@@ -1850,39 +1850,39 @@
 
       // 6. Les 24 Nœuds de Niveau
       const nodesLayer = document.createElement('div');
-      nodesLayer.className = 'ow-nodes-layer';
+      nodesLayer.className ='ow-nodes-layer';
       this.nodeEls.clear();
       for (const node of LEVEL_NODES) {
         const dayInfo = this.daysByNum.get(node.day);
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'ow-node';
+        btn.type ='button';
+        btn.className ='ow-node';
         if (BOSS_DAYS.has(node.day)) btn.classList.add('is-boss');
         if (node.day === FINALE_DAY) btn.classList.add('is-finale');
 
-        btn.style.left = `${node.x}px`;
-        btn.style.top = `${node.y}px`;
+        btn.style.left =`${node.x}px`;
+        btn.style.top =`${node.y}px`;
         btn.dataset.day = String(node.day);
 
         const labelText = node.place;
-        const ariaTitle = dayInfo ? `Jour ${node.day} : ${dayInfo.title} (${labelText})` : `Jour ${node.day} : ${labelText}`;
+        const ariaTitle = dayInfo ?`Jour ${node.day} : ${dayInfo.title} (${labelText})`:`Jour ${node.day} : ${labelText}`;
         btn.setAttribute('aria-label', ariaTitle);
 
-        let crestHtml = '';
+        let crestHtml ='';
         if (BOSS_DAYS.has(node.day)) {
-          crestHtml = '<span class="ow-node-crest" aria-hidden="true">⚔️</span>';
+          crestHtml ='<span class="ow-node-crest"aria-hidden="true"></span>';
         } else if (node.day === FINALE_DAY) {
-          crestHtml = '<span class="ow-node-crest" aria-hidden="true">👑</span>';
+          crestHtml ='<span class="ow-node-crest"aria-hidden="true"></span>';
         }
 
-        btn.innerHTML = `
-          <span class="ow-node-ring" aria-hidden="true"></span>
+        btn.innerHTML =`
+          <span class="ow-node-ring"aria-hidden="true"></span>
           ${crestHtml}
           <span class="ow-node-num">${node.day}</span>
-          <span class="ow-node-check" aria-hidden="true">✓</span>
-          <span class="ow-node-lock" aria-hidden="true">🔒</span>
+          <span class="ow-node-check"aria-hidden="true"></span>
+          <span class="ow-node-lock"aria-hidden="true"></span>
           <span class="ow-node-label">${escapeHtml(labelText)}</span>
-        `;
+`;
 
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1903,22 +1903,22 @@
 
       // 7. Personnages (Le Vilain Chibi, Kingsley, Laure Chibi)
       const actorsLayer = document.createElement('div');
-      actorsLayer.className = 'ow-actors-layer';
+      actorsLayer.className ='ow-actors-layer';
 
       // Le Vilain Chibi (près du Sanctuaire du Jour 24)
       const villainBtn = document.createElement('button');
-      villainBtn.type = 'button';
-      villainBtn.className = 'ow-actor ow-villain';
-      villainBtn.style.transform = `translate3d(${VILLAIN_POS.x}px, ${VILLAIN_POS.y}px, 0)`;
-      villainBtn.setAttribute('aria-label', 'Parler au Vilain');
-      villainBtn.innerHTML = `
-        <span class="ow-actor-shadow" aria-hidden="true"></span>
-        <span class="ow-villain-tag">Le Vilain 💬</span>
-        <img class="ow-villain-sprite" src="assets/sprite_villain.png" alt="Le Vilain" draggable="false" />
-      `;
+      villainBtn.type ='button';
+      villainBtn.className ='ow-actor ow-villain';
+      villainBtn.style.transform =`translate3d(${VILLAIN_POS.x}px, ${VILLAIN_POS.y}px, 0)`;
+      villainBtn.setAttribute('aria-label','Parler au Vilain');
+      villainBtn.innerHTML =`
+        <span class="ow-actor-shadow"aria-hidden="true"></span>
+        <span class="ow-villain-tag">Le Vilain </span>
+        <img class="ow-villain-sprite"src="assets/sprite_villain.png"alt="Le Vilain"draggable="false"/>
+`;
       const villainImg = villainBtn.querySelector('.ow-villain-sprite');
       villainImg.onerror = () => {
-        villainImg.src = 'assets/villain_avatar.png';
+        villainImg.src ='assets/villain_avatar.png';
       };
       villainBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1930,33 +1930,33 @@
 
       // Kingsley Chibi
       const kingsleyEl = document.createElement('div');
-      kingsleyEl.className = 'ow-actor ow-kingsley';
-      kingsleyEl.title = 'Kingsley — Fidèle Batracien Royal';
-      kingsleyEl.innerHTML = `
-        <span class="ow-actor-shadow" aria-hidden="true"></span>
+      kingsleyEl.className ='ow-actor ow-kingsley';
+      kingsleyEl.title ='Kingsley — Fidèle Batracien Royal';
+      kingsleyEl.innerHTML =`
+        <span class="ow-actor-shadow"aria-hidden="true"></span>
         <div class="ow-kingsley-motion">
           <div class="ow-kingsley-flip">
-            <img class="ow-kingsley-sprite" src="assets/sprite_kingsley.png" alt="Kingsley" draggable="false" />
+            <img class="ow-kingsley-sprite"src="assets/sprite_kingsley.png"alt="Kingsley"draggable="false"/>
           </div>
         </div>
-      `;
+`;
       const kingsleyImg = kingsleyEl.querySelector('.ow-kingsley-sprite');
       kingsleyImg.onerror = () => {
-        kingsleyImg.src = 'assets/kingsley_avatar.png';
+        kingsleyImg.src ='assets/kingsley_avatar.png';
       };
       kingsleyEl.addEventListener('click', (e) => {
         e.stopPropagation();
         if (this.dragMoved) return;
         MapSFX.playClick();
-        this._spawnSparkleBurst(this.kingsley.x, this.kingsley.y - 16, 14, '#34d399');
+        this._spawnSparkleBurst(this.kingsley.x, this.kingsley.y - 16, 14,'#34d399');
         this._showDialogBubble({
           x: this.kingsley.x,
           y: this.kingsley.y - 30,
-          icon: '👑🐸',
-          title: 'Kingsley brandit une pancarte !',
-          text: "« CROÂ ! EN ROUTE ASSISTANTE, LES COFFRES ET LE CHOCOLAT NE VONT PAS S'OUVRIR TOUT SEULS ! »",
-          footerLeft: 'Compagnon Royal',
-          footerRight: '✦ Fidèle au poste'
+          icon:'?',
+          title:'Kingsley brandit une pancarte !',
+          text:"« CROÂ ! EN ROUTE ASSISTANTE, LES COFFRES ET LE CHOCOLAT NE VONT PAS S'OUVRIR TOUT SEULS ! »",
+          footerLeft:'Compagnon Royal',
+          footerRight:'Fidèle au poste'
         });
       });
       this.kingsleyEl = kingsleyEl;
@@ -1966,20 +1966,20 @@
 
       // Laure Chibi
       const lauraEl = document.createElement('div');
-      lauraEl.className = 'ow-actor ow-laura';
-      lauraEl.innerHTML = `
-        <span class="ow-actor-shadow" aria-hidden="true"></span>
-        <span class="ow-laura-aura" aria-hidden="true"></span>
-        <span class="ow-laura-pointer" aria-hidden="true">▼</span>
+      lauraEl.className ='ow-actor ow-laura';
+      lauraEl.innerHTML =`
+        <span class="ow-actor-shadow"aria-hidden="true"></span>
+        <span class="ow-laura-aura"aria-hidden="true"></span>
+        <span class="ow-laura-pointer"aria-hidden="true">▼</span>
         <div class="ow-laura-motion">
           <div class="ow-laura-flip">
-            <img class="ow-laura-sprite" src="assets/sprite_laura.png" alt="Laure" draggable="false" />
+            <img class="ow-laura-sprite"src="assets/sprite_laura.png"alt="Laure"draggable="false"/>
           </div>
         </div>
-      `;
+`;
       const lauraImg = lauraEl.querySelector('.ow-laura-sprite');
       lauraImg.onerror = () => {
-        lauraImg.src = 'assets/heroine_avatar.png';
+        lauraImg.src ='assets/heroine_avatar.png';
       };
       this.lauraEl = lauraEl;
       this.lauraMotionEl = lauraEl.querySelector('.ow-laura-motion');
@@ -1991,17 +1991,17 @@
 
       // 8. Canvas Ambiant (Nuages, Lucioles d'Éther, Neige Nord-Est, Étincelles)
       const canvas = document.createElement('canvas');
-      canvas.className = 'ow-ambient-canvas';
+      canvas.className ='ow-ambient-canvas';
       canvas.width = WORLD_W;
       canvas.height = WORLD_H;
-      canvas.setAttribute('aria-hidden', 'true');
+      canvas.setAttribute('aria-hidden','true');
       this.ambientCanvas = canvas;
       this.ambientCtx = canvas.getContext('2d');
       stage.appendChild(canvas);
 
       // 9. Couche Bulles de Dialogue JRPG
       const bubbleLayer = document.createElement('div');
-      bubbleLayer.className = 'ow-bubble-layer';
+      bubbleLayer.className ='ow-bubble-layer';
       this.bubbleLayerEl = bubbleLayer;
       stage.appendChild(bubbleLayer);
 
@@ -2022,7 +2022,7 @@
       window.addEventListener('keydown', this._boundKeyDown);
       window.addEventListener('resize', this._boundResize, { passive: true });
 
-      if (typeof ResizeObserver !== 'undefined') {
+      if (typeof ResizeObserver !=='undefined') {
         this.resizeObserver = new ResizeObserver(() => {
           this._updateViewportSize();
         });
@@ -2043,7 +2043,7 @@
 
     _onPointerDown(e) {
       // Ignorer clic droit ou clic à l'intérieur d'une bulle de dialogue
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.pointerType ==='mouse'&& e.button !== 0) return;
       if (e.target && e.target.closest && e.target.closest('.ow-dialog-bubble')) return;
 
       this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -2231,13 +2231,13 @@
       const activeEl = document.activeElement;
       if (activeEl) {
         const tag = activeEl.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || activeEl.isContentEditable) {
+        if (tag ==='INPUT'|| tag ==='TEXTAREA'|| tag ==='SELECT'|| activeEl.isContentEditable) {
           return false;
         }
       }
       // Ne pas intercepter si une modale / fenêtre de niveau est ouverte au-dessus
       const openModal = document.querySelector(
-        '.modal-overlay.active, .day-modal.active, .day-modal-overlay.active, .story-modal.active, [role="dialog"].active'
+'.modal-overlay.active, .day-modal.active, .day-modal-overlay.active, .story-modal.active, [role="dialog"].active'
       );
       if (openModal && openModal.offsetParent !== null) return false;
       return true;
@@ -2246,23 +2246,23 @@
     _onKeyDown(e) {
       if (!this._isMapInteractiveForKeyboard()) return;
 
-      if (e.key === 'Escape' && this.activeBubble) {
+      if (e.key ==='Escape'&& this.activeBubble) {
         this._closeDialogBubble();
         return;
       }
 
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      if (e.key ==='ArrowRight'|| e.key ==='d'|| e.key ==='D') {
         e.preventDefault();
         this.stepDay(1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+      } else if (e.key ==='ArrowLeft'|| e.key ==='a'|| e.key ==='A') {
         e.preventDefault();
         this.stepDay(-1);
-      } else if (e.key === 'Enter' || e.key === ' ') {
+      } else if (e.key ==='Enter'|| e.key ==='') {
         e.preventDefault();
         this._enterDayIfAllowed(this.currentDay);
-      } else if (e.key === '+' || e.key === '=') {
+      } else if (e.key ==='+'|| e.key ==='=') {
         this.zoomIn();
-      } else if (e.key === '-' || e.key === '_') {
+      } else if (e.key ==='-'|| e.key ==='_') {
         this.zoomOut();
       }
     }
@@ -2356,7 +2356,7 @@
 
     focusOnRegion(weekNum) {
       this.cam.followHero = false;
-      if (weekNum === 'all' || weekNum === 0 || weekNum == null) {
+      if (weekNum ==='all'|| weekNum === 0 || weekNum == null) {
         const fitZoom = clamp(
           Math.min(this.vpW / WORLD_W, this.vpH / WORLD_H) * 0.97,
           MIN_ZOOM,
@@ -2412,7 +2412,7 @@
         return;
       }
       MapSFX.playClick();
-      if (typeof this.options.onEnterDay === 'function') {
+      if (typeof this.options.onEnterDay ==='function') {
         this.options.onEnterDay(dayNum);
       }
     }
@@ -2429,11 +2429,11 @@
       this._showDialogBubble({
         x: node.x,
         y: node.y - 24,
-        icon: '🔒',
-        title: `Sceau Temporel — Jour ${dayNum}`,
-        text: `Cette porte du multivers s'ouvrira le ${dayNum} décembre ! (Tu peux activer le Mode Exploration Libre dans le HUD pour tout tester.)`,
+        icon:'?',
+        title:`Sceau Temporel — Jour ${dayNum}`,
+        text:`Cette porte du multivers s'ouvrira le ${dayNum} décembre ! (Tu peux activer le Mode Exploration Libre dans le HUD pour tout tester.)`,
         footerLeft: node.place,
-        footerRight: '⏳ Patience...'
+        footerRight:'⏳ Patience...'
       });
     }
 
@@ -2460,7 +2460,7 @@
         this.focusOnHero(true);
         if (autoEnter) {
           this._enterDayIfAllowed(targetDay);
-        } else if (typeof this.options.onSelectDay === 'function') {
+        } else if (typeof this.options.onSelectDay ==='function') {
           this.options.onSelectDay(targetDay);
         }
         return;
@@ -2482,7 +2482,7 @@
         const duration = clamp(dist / speed, 0.32, 3.2);
 
         this.travel = {
-          mode: 'walk',
+          mode:'walk',
           targetDay,
           autoEnter: Boolean(autoEnter),
           startArc,
@@ -2505,17 +2505,17 @@
 
         if (this.fastTravelArcEl) {
           this.fastTravelArcEl.setAttribute(
-            'd',
-            `M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${midX.toFixed(1)} ${ctrlY.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`
+'d',
+`M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${midX.toFixed(1)} ${ctrlY.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`
           );
           this.fastTravelArcEl.classList.add('is-active');
         }
 
         MapSFX.playFastTravel();
-        this._spawnSparkleBurst(sx, sy - 20, 18, '#7dd3fc');
+        this._spawnSparkleBurst(sx, sy - 20, 18,'#7dd3fc');
 
         this.travel = {
-          mode: 'fast',
+          mode:'fast',
           targetDay,
           autoEnter: Boolean(autoEnter),
           sx,
@@ -2545,7 +2545,7 @@
 
       this._refreshNodesState();
       this._refreshEtherPath();
-      this._spawnSparkleBurst(targetNode.x, targetNode.y - 6, 14, '#fef08a');
+      this._spawnSparkleBurst(targetNode.x, targetNode.y - 6, 14,'#fef08a');
 
       // Centrage doux sur la position finale
       this.cam.targetX = targetNode.x;
@@ -2553,7 +2553,7 @@
       this._clampCameraTarget();
       this.cam.followHero = false;
 
-      if (typeof this.options.onSelectDay === 'function') {
+      if (typeof this.options.onSelectDay ==='function') {
         this.options.onSelectDay(this.currentDay);
       }
 
@@ -2603,7 +2603,7 @@
       }
 
       MapSFX.playSecret(isNew);
-      this._spawnSparkleBurst(worldX, worldY, isNew ? 26 : 12, isNew ? '#fef08a' : '#7dd3fc');
+      this._spawnSparkleBurst(worldX, worldY, isNew ? 26 : 12, isNew ?'#fef08a':'#7dd3fc');
 
       const foundCount = this.discoveredSecrets.size;
       const totalCount = MAP_EASTER_EGGS.length;
@@ -2613,13 +2613,13 @@
         y: worldY,
         icon: secret.icon,
         title: secret.title,
-        text: `« ${secret.text} »`,
-        footerLeft: isNew ? '✦ Nouveau Secret Découvert !' : '★ Secret du Multivers',
-        footerRight: `${foundCount} / ${totalCount} Secrets`,
+        text:`« ${secret.text} »`,
+        footerLeft: isNew ?'Nouveau Secret Découvert !':'Secret du Multivers',
+        footerRight:`${foundCount} / ${totalCount} Secrets`,
         isNew
       });
 
-      if (typeof this.options.onSecretFound === 'function') {
+      if (typeof this.options.onSecretFound ==='function') {
         this.options.onSecretFound(secret.id, foundCount, totalCount, secret);
       }
     }
@@ -2632,27 +2632,27 @@
           : VILLAIN_LOVE_NOTES[this.villainNoteIdx];
 
       MapSFX.playSecret(true);
-      this._spawnSparkleBurst(VILLAIN_POS.x, VILLAIN_POS.y - 45, 22, '#fb7185');
+      this._spawnSparkleBurst(VILLAIN_POS.x, VILLAIN_POS.y - 45, 22,'#fb7185');
 
       this._showDialogBubble({
         x: VILLAIN_POS.x - 10,
         y: VILLAIN_POS.y - 60,
-        icon: '🖤👑',
-        title: 'Le Vilain (Ton Chéri)',
+        icon:'?',
+        title:'Le Vilain (Ton Chéri)',
         text: pick,
-        footerLeft: 'Sanctuaire du 24 Décembre',
-        footerRight: '❤️ Mot Doux Secret',
-        variant: 'villain'
+        footerLeft:'Sanctuaire du 24 Décembre',
+        footerRight:'Mot Doux Secret',
+        variant:'villain'
       });
 
-      if (typeof this.options.onVillainClick === 'function') {
+      if (typeof this.options.onVillainClick ==='function') {
         this.options.onVillainClick(pick);
       }
     }
 
     _showDialogBubble({ x, y, icon, title, text, footerLeft, footerRight, isNew, variant }) {
       if (!this.bubbleLayerEl) return;
-      this.bubbleLayerEl.innerHTML = '';
+      this.bubbleLayerEl.innerHTML ='';
 
       // Empêcher la bulle de sortir des bords gauche/droite/haut du monde 2000 × 1125
       const clampedX = clamp(x, 190, WORLD_W - 190);
@@ -2660,25 +2660,25 @@
       const tailOffsetPx = clamp(x - clampedX, -110, 110);
 
       const el = document.createElement('div');
-      el.className = `ow-dialog-bubble${showBelow ? ' is-below' : ''}${variant === 'villain' ? ' is-villain' : ''}`;
-      el.style.left = `${clampedX}px`;
-      el.style.top = `${y}px`;
-      el.style.setProperty('--tail-left', `calc(50% + ${tailOffsetPx.toFixed(1)}px)`);
+      el.className =`ow-dialog-bubble${showBelow ?'is-below':''}${variant ==='villain'?'is-villain':''}`;
+      el.style.left =`${clampedX}px`;
+      el.style.top =`${y}px`;
+      el.style.setProperty('--tail-left',`calc(50% + ${tailOffsetPx.toFixed(1)}px)`);
 
-      el.innerHTML = `
+      el.innerHTML =`
         <div class="ow-bubble-header">
           <div class="ow-bubble-title-wrap">
-            <span class="ow-bubble-icon" aria-hidden="true">${icon || '✦'}</span>
+            <span class="ow-bubble-icon"aria-hidden="true">${icon ||''}</span>
             <span class="ow-bubble-title">${escapeHtml(title)}</span>
           </div>
-          <button type="button" class="ow-bubble-close" aria-label="Fermer">×</button>
+          <button type="button"class="ow-bubble-close"aria-label="Fermer">×</button>
         </div>
         <p class="ow-bubble-text">${escapeHtml(text)}</p>
         <div class="ow-bubble-footer">
-          <span class="${isNew ? 'ow-bubble-badge-new' : ''}">${escapeHtml(footerLeft || '')}</span>
-          <span>${escapeHtml(footerRight || '')}</span>
+          <span class="${isNew ?'ow-bubble-badge-new':''}">${escapeHtml(footerLeft ||'')}</span>
+          <span>${escapeHtml(footerRight ||'')}</span>
         </div>
-      `;
+`;
 
       el.querySelector('.ow-bubble-close').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -2691,7 +2691,7 @@
 
     _closeDialogBubble() {
       if (this.bubbleLayerEl) {
-        this.bubbleLayerEl.innerHTML = '';
+        this.bubbleLayerEl.innerHTML ='';
       }
       this.activeBubble = null;
     }
@@ -2700,12 +2700,12 @@
     // SYNCHRONISATION D'ÉTAT EXTERNE (updateState & getSecretsData)
     // ------------------------------------------------------------------------
     updateState(patch = {}) {
-      if (!patch || typeof patch !== 'object') return;
+      if (!patch || typeof patch !=='object') return;
 
       if (patch.completedDays !== undefined) {
         this.completedDays = new Set(patch.completedDays || []);
       }
-      if (typeof patch.unlockedCheckFn === 'function') {
+      if (typeof patch.unlockedCheckFn ==='function') {
         this.unlockedCheckFn = patch.unlockedCheckFn;
       }
       if (patch.discoveredSecrets !== undefined) {
@@ -2715,7 +2715,7 @@
       if (patch.aldrynHouse !== undefined) {
         this.aldrynHouse = patch.aldrynHouse;
       }
-      if (typeof patch.currentDay === 'number' && !this.travel) {
+      if (typeof patch.currentDay ==='number'&& !this.travel) {
         const clamped = clamp(patch.currentDay, 1, 24);
         if (clamped !== this.currentDay) {
           this.currentDay = clamped;
@@ -2799,18 +2799,18 @@
       const dashOffset = Math.max(0, total - litLength);
 
       for (const pathEl of [this.pathEtherGlowEl, this.pathEtherCoreEl]) {
-        pathEl.style.strokeDasharray = `${total.toFixed(1)}`;
-        pathEl.style.strokeDashoffset = `${dashOffset.toFixed(1)}`;
+        pathEl.style.strokeDasharray =`${total.toFixed(1)}`;
+        pathEl.style.strokeDashoffset =`${dashOffset.toFixed(1)}`;
       }
     }
 
     _refreshAldrynAura() {
       if (!this.lauraAuraEl) return;
       const house = this.aldrynHouse;
-      const primary = house && house.colorPrimary ? house.colorPrimary : '#38bdf8';
-      const accent = house && house.colorAccent ? house.colorAccent : '#7dd3fc';
+      const primary = house && house.colorPrimary ? house.colorPrimary :'#38bdf8';
+      const accent = house && house.colorAccent ? house.colorAccent :'#7dd3fc';
       this.lauraAuraEl.style.borderColor = accent;
-      this.lauraAuraEl.style.boxShadow = `0 0 18px ${primary}, 0 0 10px ${accent}`;
+      this.lauraAuraEl.style.boxShadow =`0 0 18px ${primary}, 0 0 10px ${accent}`;
     }
 
     // ------------------------------------------------------------------------
@@ -2842,7 +2842,7 @@
           r: 1.8 + Math.random() * 2.6,
           phase: Math.random() * Math.PI * 2,
           speed: 1.4 + Math.random() * 2.2,
-          color: Math.random() > 0.45 ? '#7dd3fc' : '#fef08a'
+          color: Math.random() > 0.45 ?'#7dd3fc':'#fef08a'
         });
       }
 
@@ -2873,12 +2873,12 @@
           size: 2.2 + Math.random() * 2.6,
           life: 0,
           maxLife: 0.45 + Math.random() * 0.3,
-          color: Math.random() > 0.35 ? '#fef08a' : '#7dd3fc'
+          color: Math.random() > 0.35 ?'#fef08a':'#7dd3fc'
         });
       }
     }
 
-    _spawnSparkleBurst(x, y, count = 16, mainColor = '#fef08a') {
+    _spawnSparkleBurst(x, y, count = 16, mainColor ='#fef08a') {
       for (let i = 0; i < count; i++) {
         const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.3;
         const speed = 35 + Math.random() * 75;
@@ -2890,7 +2890,7 @@
           size: 2.5 + Math.random() * 3.2,
           life: 0,
           maxLife: 0.55 + Math.random() * 0.42,
-          color: i % 3 === 0 ? '#ffffff' : mainColor
+          color: i % 3 === 0 ?'#ffffff': mainColor
         });
       }
     }
@@ -2909,9 +2909,9 @@
           c.y = 70 + Math.random() * (WORLD_H - 140);
         }
         const grad = ctx.createRadialGradient(c.x, c.y, c.ry * 0.2, c.x, c.y, c.rx);
-        grad.addColorStop(0, `rgba(226, 238, 255, ${c.alpha.toFixed(3)})`);
-        grad.addColorStop(0.6, `rgba(186, 214, 255, ${(c.alpha * 0.45).toFixed(3)})`);
-        grad.addColorStop(1, 'rgba(186, 214, 255, 0)');
+        grad.addColorStop(0,`rgba(226, 238, 255, ${c.alpha.toFixed(3)})`);
+        grad.addColorStop(0.6,`rgba(186, 214, 255, ${(c.alpha * 0.45).toFixed(3)})`);
+        grad.addColorStop(1,'rgba(186, 214, 255, 0)');
         ctx.save();
         ctx.fillStyle = grad;
         ctx.beginPath();
@@ -2961,7 +2961,7 @@
         if (alpha <= 0.01) continue;
 
         ctx.globalAlpha = alpha;
-        ctx.fillStyle = '#e0f2fe';
+        ctx.fillStyle ='#e0f2fe';
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
@@ -3038,7 +3038,7 @@
         this.travel.elapsed += dt;
         const rawT = clamp(this.travel.elapsed / this.travel.duration, 0, 1);
 
-        if (this.travel.mode === 'walk') {
+        if (this.travel.mode ==='walk') {
           // Léger ease-in-out sur les bords tout en gardant un rythme naturel
           const easeT = rawT < 0.5 ? 2 * rawT * rawT : 1 - Math.pow(-2 * rawT + 2, 2) / 2;
           const curArc = lerp(this.travel.startArc, this.travel.endArc, easeT);
@@ -3136,26 +3136,26 @@
 
       // Animations visuelles Laure (idle respiration vs balancement/sautillement marche)
       if (isMoving) {
-        this.laura.walkPhase += dt * (this.travel && this.travel.mode === 'fast' ? 16 : 14);
+        this.laura.walkPhase += dt * (this.travel && this.travel.mode ==='fast'? 16 : 14);
         const hopY = -Math.abs(Math.sin(this.laura.walkPhase)) * (10 * moveSpeedRatio);
         const tilt = Math.sin(this.laura.walkPhase) * 6.5;
         if (this.lauraMotionEl) {
-          this.lauraMotionEl.style.transform = `translate3d(0, ${hopY.toFixed(2)}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+          this.lauraMotionEl.style.transform =`translate3d(0, ${hopY.toFixed(2)}px, 0) rotate(${tilt.toFixed(2)}deg)`;
         }
       } else {
         this.laura.idlePhase += dt * 3.1;
         const breatheY = Math.sin(this.laura.idlePhase) * 2.2;
         const scaleY = 1 + Math.sin(this.laura.idlePhase) * 0.025;
         if (this.lauraMotionEl) {
-          this.lauraMotionEl.style.transform = `translate3d(0, ${(-breatheY).toFixed(2)}px, 0) scaleY(${scaleY.toFixed(4)})`;
+          this.lauraMotionEl.style.transform =`translate3d(0, ${(-breatheY).toFixed(2)}px, 0) scaleY(${scaleY.toFixed(4)})`;
         }
       }
 
       if (this.lauraEl) {
-        this.lauraEl.style.transform = `translate3d(${this.laura.x.toFixed(2)}px, ${this.laura.y.toFixed(2)}px, 0)`;
+        this.lauraEl.style.transform =`translate3d(${this.laura.x.toFixed(2)}px, ${this.laura.y.toFixed(2)}px, 0)`;
       }
       if (this.lauraFlipEl) {
-        this.lauraFlipEl.style.transform = `scaleX(${this.laura.facing})`;
+        this.lauraFlipEl.style.transform =`scaleX(${this.laura.facing})`;
       }
 
       // Animations visuelles Kingsley (petits bonds adorables quand il suit)
@@ -3165,26 +3165,26 @@
         const kHopY = -Math.abs(Math.sin(this.kingsley.hopPhase)) * 13;
         const kTilt = Math.sin(this.kingsley.hopPhase) * 9;
         if (this.kingsleyMotionEl) {
-          this.kingsleyMotionEl.style.transform = `translate3d(0, ${kHopY.toFixed(2)}px, 0) rotate(${kTilt.toFixed(2)}deg)`;
+          this.kingsleyMotionEl.style.transform =`translate3d(0, ${kHopY.toFixed(2)}px, 0) rotate(${kTilt.toFixed(2)}deg)`;
         }
       } else {
         this.kingsley.hopPhase += dt * 2.6;
         const idleHop = Math.max(0, Math.sin(this.kingsley.hopPhase) - 0.65) * 14;
         if (this.kingsleyMotionEl) {
-          this.kingsleyMotionEl.style.transform = `translate3d(0, ${(-idleHop).toFixed(2)}px, 0)`;
+          this.kingsleyMotionEl.style.transform =`translate3d(0, ${(-idleHop).toFixed(2)}px, 0)`;
         }
       }
 
       if (this.kingsleyEl) {
-        this.kingsleyEl.style.transform = `translate3d(${this.kingsley.x.toFixed(2)}px, ${this.kingsley.y.toFixed(2)}px, 0)`;
+        this.kingsleyEl.style.transform =`translate3d(${this.kingsley.x.toFixed(2)}px, ${this.kingsley.y.toFixed(2)}px, 0)`;
       }
       if (this.kingsleyFlipEl) {
-        this.kingsleyFlipEl.style.transform = `scaleX(${this.kingsley.facing})`;
+        this.kingsleyFlipEl.style.transform =`scaleX(${this.kingsley.facing})`;
       }
     }
 
     _updateShip(dt) {
-      // Navigation douce en boucle de "Le Maram" sur la mer du Sud (autour de 840, 995)
+      // Navigation douce en boucle de"Le Maram"sur la mer du Sud (autour de 840, 995)
       this.ship.phase += dt * 0.24;
       const nextX = 875 + Math.cos(this.ship.phase) * 165;
       const nextY = 998 + Math.sin(this.ship.phase * 2) * 34;
@@ -3196,10 +3196,10 @@
       this.ship.y = nextY;
 
       if (this.shipEl) {
-        this.shipEl.style.transform = `translate3d(${this.ship.x.toFixed(2)}px, ${this.ship.y.toFixed(2)}px, 0)`;
+        this.shipEl.style.transform =`translate3d(${this.ship.x.toFixed(2)}px, ${this.ship.y.toFixed(2)}px, 0)`;
       }
       if (this.shipFlipEl) {
-        this.shipFlipEl.style.transform = `scaleX(${this.ship.facing})`;
+        this.shipFlipEl.style.transform =`scaleX(${this.ship.facing})`;
       }
     }
 
@@ -3222,7 +3222,7 @@
       if (!this.stageEl) return;
       const tx = this.vpW * 0.5 - this.cam.x * this.cam.zoom;
       const ty = this.vpH * 0.5 - this.cam.y * this.cam.zoom;
-      this.stageEl.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${this.cam.zoom.toFixed(5)})`;
+      this.stageEl.style.transform =`translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${this.cam.zoom.toFixed(5)})`;
     }
   }
 
