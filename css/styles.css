@@ -2768,3 +2768,263 @@ body::after {
 .vn-char-name {
   color: #231a16 !important;
 }
+
+
+/* ==========================================================================
+   FIX VISUEL v3.1 : ÉCRAN TITRE & DISCUSSIONS STYLE "CHRONIQUE DES SILENCIEUX"
+   ========================================================================== */
+
+/* 1. Écran Titre — Affiche ouverte sans boîte marron boueuse */
+.title-screen-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 24px 20px !important;
+}
+
+.title-main-heading {
+  color: #1f1612 !important;
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.55) !important;
+  letter-spacing: 0.04em !important;
+}
+
+.title-chibi-trio {
+  gap: 20px !important;
+  margin: 18px 0 22px !important;
+}
+
+.chibi-medallion {
+  width: 112px !important;
+  height: 112px !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  background: #f5ecd9 !important;
+  border: 2.5px solid #231a16 !important;
+  box-shadow: 4px 4px 0 rgba(35, 26, 22, 0.3) !important;
+  overflow: visible !important;
+}
+
+.chibi-medallion.chibi-kingsley {
+  width: 122px !important;
+  height: 122px !important;
+  transform: translateY(-6px);
+}
+
+.chibi-medallion img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+  background: #dfd6c5 !important;
+  filter: none !important;
+}
+
+.chibi-tag {
+  bottom: -11px !important;
+  background: #231a16 !important;
+  color: #f5ecd9 !important;
+  border: 1.5px solid #d49b35 !important;
+  font-size: 11px !important;
+  padding: 2px 10px !important;
+}
+
+/* 2. En-tête de Modale — Parchemin lisible (fini la bannière bleu nuit) */
+.level-modal-hero {
+  background: linear-gradient(180deg, #ede1ca 0%, #e4d4b7 100%) !important;
+  border-bottom: 2px solid #231a16 !important;
+  padding: 18px 24px 14px !important;
+}
+
+.level-hero-bg {
+  display: none !important;
+}
+
+.level-hero-scrim {
+  display: none !important;
+}
+
+.level-modal-kicker {
+  color: #8a422b !important;
+  font-weight: 700 !important;
+}
+
+.level-modal-title {
+  color: #1f1612 !important;
+  text-shadow: none !important;
+}
+
+.level-book-pill {
+  background: #f5ecd9 !important;
+  color: #231a16 !important;
+  border: 1.5px solid #231a16 !important;
+}
+
+.level-boss-badge {
+  background: #231a16 !important;
+  color: #e4b242 !important;
+  border: 1.5px solid #d49b35 !important;
+}
+
+.level-modal-hero .modal-close-btn {
+  background: #f5ecd9 !important;
+  color: #231a16 !important;
+  border: 2px solid #231a16 !important;
+}
+
+.level-tabs {
+  background: #dfd0b4 !important;
+  border-bottom: 2px solid #231a16 !important;
+  padding: 8px 18px !important;
+  gap: 8px !important;
+}
+
+.level-tab {
+  color: #4a3a31 !important;
+  border: 1.5px solid transparent !important;
+  background: transparent !important;
+}
+
+.level-tab.active {
+  background: #f5ecd9 !important;
+  color: #1f1612 !important;
+  border: 1.5px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.2) !important;
+}
+
+/* 3. Discussions — Mise en scène Cinéma "Chronique des Silencieux" */
+.vn-container {
+  gap: 0 !important;
+  border: 2px solid #231a16 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background: #14100e !important;
+  box-shadow: 4px 4px 0 rgba(35, 26, 22, 0.25) !important;
+}
+
+.vn-stage {
+  background:
+    radial-gradient(circle at 50% 45%, #dfd8cc 0%, #cbc2b2 75%, #b8ae9d 100%) !important;
+  min-height: 270px !important;
+  padding: 20px 24px 0 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  border-bottom: 2px solid #231a16 !important;
+  position: relative !important;
+}
+
+/* Masquer les personnages qui ne parlent pas pour un plan portrait pur façon image_7 */
+.vn-char-card {
+  display: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  max-width: 260px !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.vn-char-card.speaking {
+  display: flex !important;
+  animation: vnPortraitFadeIn 0.24s ease-out !important;
+}
+
+@keyframes vnPortraitFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vn-char-portrait {
+  width: 220px !important;
+  height: 220px !important;
+  border-radius: 6px 6px 0 0 !important;
+  border: 2px solid #231a16 !important;
+  border-bottom: none !important;
+  background: #dfd8cc !important;
+  box-shadow: 4px 0 0 rgba(35, 26, 22, 0.18) !important;
+  overflow: hidden !important;
+}
+
+.vn-char-portrait img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.vn-char-name {
+  display: none !important;
+}
+
+/* Bandeau noir cinéma en bas façon Chronique des Silencieux (image_7) */
+.vn-dialogue-box {
+  background: #14100e !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 18px 26px 20px !important;
+  box-shadow: none !important;
+}
+
+.vn-dialogue-header {
+  margin-bottom: 8px !important;
+}
+
+.vn-speaker-badge {
+  background: transparent !important;
+  color: #e4b242 !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: var(--font-title, 'Cinzel', Georgia, serif) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.vn-progress-pill {
+  color: #9e9182 !important;
+  font-size: 12px !important;
+}
+
+.vn-text {
+  color: #f7f1e3 !important;
+  font-family: var(--font-story, 'Cormorant Garamond', Georgia, serif) !important;
+  font-size: 21px !important;
+  line-height: 1.5 !important;
+  min-height: 64px !important;
+}
+
+.vn-actions {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(228, 178, 66, 0.22) !important;
+}
+
+.vn-btn-secondary {
+  background: #28201c !important;
+  color: #e7dcc8 !important;
+  border: 1.5px solid #5c4b3f !important;
+}
+
+.vn-btn-secondary:hover:not(:disabled) {
+  background: #3a2e28 !important;
+  border-color: #e4b242 !important;
+}
+
+.vn-btn-primary {
+  background: #d49b35 !important;
+  color: #1a1310 !important;
+  border: 1.5px solid #f5ecd9 !important;
+  font-weight: 700 !important;
+}
+
+.vn-btn-trial {
+  background: #b5493a !important;
+  color: #fdf7eb !important;
+  border: 1.5px solid #f5ecd9 !important;
+  font-weight: 700 !important;
+}
