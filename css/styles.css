@@ -3028,3 +3028,246 @@ body::after {
   border: 1.5px solid #f5ecd9 !important;
   font-weight: 700 !important;
 }
+
+
+/* ==========================================================================
+   FIX v4 : CHAPITRE PLEIN ÉCRAN (PAS DE POPUP) + DISCUSSIONS CHRONIQUE DES SILENCIEUX
+   ========================================================================== */
+
+/* 1. Supprimer le mode popup : 100% plein écran */
+#chapter-modal-backdrop.modal-backdrop {
+  padding: 0 !important;
+  background: #efe5d2 !important;
+  backdrop-filter: none !important;
+}
+
+#chapter-modal-container.chapter-modal-shell {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #f3ead8 !important;
+}
+
+/* 2. En-tête compact & lisible (sans bannière bleu nuit) */
+.chapter-header {
+  background: #ede1ca !important;
+  border-bottom: 2px solid #231a16 !important;
+  padding: 14px 28px 12px !important;
+  min-height: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.chapter-header-bg,
+.chapter-header-scrim {
+  display: none !important;
+}
+
+.chapter-eyebrow {
+  color: #8a422b !important;
+  font-weight: 700 !important;
+}
+
+.chapter-title {
+  color: #1f1612 !important;
+  text-shadow: none !important;
+}
+
+.chapter-books-row {
+  color: #3d2c23 !important;
+}
+
+.rarity-pill {
+  background: #231a16 !important;
+  color: #e4b242 !important;
+  border: 1.5px solid #d49b35 !important;
+}
+
+.modal-close-x {
+  background: #f5ecd9 !important;
+  color: #231a16 !important;
+  border: 2px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.25) !important;
+}
+
+.modal-close-x:hover {
+  background: #b5493a !important;
+  color: #fdf7eb !important;
+}
+
+/* Onglets d'étapes */
+.stage-tabs-bar {
+  background: #dfd0b4 !important;
+  border-bottom: 2px solid #231a16 !important;
+  padding: 8px 28px !important;
+  flex-shrink: 0 !important;
+}
+
+.stage-tab-btn {
+  color: #4a3a31 !important;
+  background: transparent !important;
+  border: 1.5px solid transparent !important;
+}
+
+.stage-tab-btn.active {
+  background: #f5ecd9 !important;
+  color: #1f1612 !important;
+  border: 1.5px solid #231a16 !important;
+  box-shadow: 2px 2px 0 rgba(35, 26, 22, 0.22) !important;
+}
+
+/* 3. Corps plein écran */
+.chapter-modal-body {
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  background: #f3ead8 !important;
+}
+
+/* Laisser un padding propre uniquement pour Épreuve & Coffre */
+#modal-stage-game,
+#modal-stage-loot {
+  padding: 24px 6vw !important;
+  max-width: 1100px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* 4. DISCUSSIONS — Plein écran style Chronique des Silencieux (image_7) */
+#modal-stage-story.vn-stage {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background:
+    radial-gradient(circle at 50% 45%, #dbd3c5 0%, #c8bfb0 75%, #b5ab99 100%) !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.vn-portraits-grid {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  padding: 24px 24px 0 !important;
+  gap: 0 !important;
+  min-height: 280px !important;
+  background: transparent !important;
+}
+
+/* Un seul personnage actif centré, SANS cadre ni bordure */
+.vn-char-card {
+  display: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: 100% !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.vn-char-card.speaking {
+  display: flex !important;
+  animation: vnCharAppear 0.25s ease-out !important;
+}
+
+@keyframes vnCharAppear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vn-portrait-ring {
+  width: auto !important;
+  height: auto !important;
+  max-height: 46vh !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.vn-portrait-ring img {
+  width: auto !important;
+  height: 44vh !important;
+  max-height: 440px !important;
+  min-height: 220px !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  filter: drop-shadow(0 8px 18px rgba(35, 26, 22, 0.25)) !important;
+}
+
+.vn-nameplate {
+  display: none !important;
+}
+
+/* Bandeau noir cinéma pleine largeur en bas (image_7) */
+.vn-dialogue-panel {
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  background: #0d0a09 !important;
+  border: none !important;
+  border-top: 2px solid #231a16 !important;
+  border-radius: 0 !important;
+  padding: 20px 8vw 24px !important;
+  box-shadow: none !important;
+}
+
+.vn-speaker-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 8px !important;
+}
+
+.vn-speaker-name {
+  background: transparent !important;
+  color: #e4b242 !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: var(--font-title, 'Cinzel', Georgia, serif) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.vn-line-count {
+  color: #9e9182 !important;
+  font-size: 12px !important;
+}
+
+.vn-dialogue-copy {
+  color: #f7f1e3 !important;
+  font-family: var(--font-story, 'Cormorant Garamond', Georgia, serif) !important;
+  font-size: 22px !important;
+  line-height: 1.5 !important;
+  min-height: 62px !important;
+  margin: 0 !important;
+}
+
+.vn-dialogue-panel .vn-controls,
+.vn-dialogue-panel .vn-actions-row {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(228, 178, 66, 0.2) !important;
+}
